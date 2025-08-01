@@ -31,7 +31,7 @@ export default function RootLayout({
             <Sidebar />
             <div className="flex-1 flex flex-col">
               <Topbar />
-              <main className="flex-1 overflow-auto bg-gradient-to-br from-background to-muted/30">
+              <main className="flex-1 overflow-auto bg-main-content">
                 {children}
               </main>
             </div>
