@@ -1,44 +1,51 @@
 "use client"
 
-import { Bell, Search, User, LogOut, Settings } from "lucide-react"
+import { Bell, Search, LogOut, Settings, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Topbar() {
   return (
-    <header className="h-14 border-b border-border bg-background flex items-center justify-between px-6">
-      <div className="flex items-center gap-4">
-        <div className="text-sm text-muted-foreground">
-          현재 병원: <span className="font-medium text-foreground">서울대학교병원</span>
-        </div>
-        <div className="text-sm text-muted-foreground">
-          기간: <span className="font-medium text-foreground">2025년 7월</span>
+    <header className="h-16 border-b border-border/50 bg-background/80 backdrop-blur-sm flex items-center justify-between px-6 shadow-sm">
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          현재 병원: <span className="font-semibold text-foreground">서울대학교병원</span>
+          <ChevronRight className="h-3 w-3 text-muted-foreground/50" />
+          기간: <span className="font-semibold text-foreground">2025년 8월</span>
         </div>
       </div>
       
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+      <div className="flex items-center gap-1">
+        <Button variant="ghost" size="sm" className="h-9 w-9 hover:bg-accent/50 transition-colors">
           <Search className="h-4 w-4" />
         </Button>
         
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        <Button variant="ghost" size="sm" className="h-9 w-9 hover:bg-accent/50 transition-colors relative">
           <Bell className="h-4 w-4" />
+          <div className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full"></div>
         </Button>
         
-        <div className="flex items-center gap-2 ml-4">
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <User className="h-4 w-4" />
-          </Button>
-          
-          <div className="text-sm">
-            <div className="font-medium">김원가</div>
-            <div className="text-xs text-muted-foreground">관리자</div>
+        <ThemeToggle />
+        
+        <div className="h-6 w-px bg-border mx-2"></div>
+        
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+              김
+            </div>
+            <div className="text-sm">
+              <div className="font-semibold">김원가</div>
+              <div className="text-xs text-muted-foreground">시스템 관리자</div>
+            </div>
           </div>
           
-          <Button variant="ghost" size="icon" className="h-8 w-8 ml-2">
+          <Button variant="ghost" size="sm" className="h-9 w-9 hover:bg-accent/50 transition-colors">
             <Settings className="h-4 w-4" />
           </Button>
           
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button variant="ghost" size="sm" className="h-9 w-9 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 transition-colors">
             <LogOut className="h-4 w-4" />
           </Button>
         </div>
