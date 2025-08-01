@@ -4,12 +4,11 @@ import { useState } from "react"
 import { 
   Bot, 
   MessageCircle, 
-  X, 
-  ChevronLeft, 
-  ChevronRight,
   Send,
   Sparkles,
-  Users
+  Users,
+  PanelRightClose,
+  PanelRightOpen
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -18,55 +17,92 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 export function UtilitySidebar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true)
+  const [activeTab, setActiveTab] = useState("ai-assistant")
   const [chatMessage, setChatMessage] = useState("")
 
-  const toggleSidebar = () => setIsOpen(!isOpen)
+  const toggleSidebar = () => setIsExpanded(!isExpanded)
+  
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab)
+    if (!isExpanded) {
+      setIsExpanded(true)
+    }
+  }
 
   return (
-    <>
-      {/* Toggle Button */}
-      <Button
-        onClick={toggleSidebar}
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "fixed right-4 top-1/2 -translate-y-1/2 z-50 h-12 w-12 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 shadow-lg transition-all duration-300",
-          isOpen && "right-80"
-        )}
-      >
-        {isOpen ? (
-          <ChevronRight className="h-5 w-5 text-primary" />
-        ) : (
-          <ChevronLeft className="h-5 w-5 text-primary" />
-        )}
-      </Button>
-
-      {/* Sidebar */}
-      <div
-        className={cn(
-          "fixed right-0 top-0 h-full w-80 bg-card/95 backdrop-blur-sm border-l border-border/50 shadow-2xl transition-transform duration-300 z-40",
-          isOpen ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="p-4 border-b border-border/50 bg-muted/30">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-lg">유틸리티</h3>
-              <Button
-                onClick={toggleSidebar}
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+    <div
+      className={cn(
+        "bg-card/50 backdrop-blur-sm border-l border-border/50 h-full flex flex-col shadow-sm transition-all duration-300",
+        isExpanded ? "w-80" : "w-16"
+      )}
+    >
+      <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className={cn(
+          "border-b border-border/50 bg-muted/30 transition-all duration-300",
+          isExpanded ? "p-4" : "p-2"
+        )}>
+          <div className="flex items-center justify-between">
+            {isExpanded && (
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                  <Sparkles className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-lg">유틸리티</h3>
+              </div>
+            )}
+            <Button
+              onClick={toggleSidebar}
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "transition-all duration-200 hover:bg-accent/50",
+                isExpanded ? "h-8 w-8" : "h-10 w-10 mx-auto"
+              )}
+            >
+              {isExpanded ? (
+                <PanelRightClose className="h-4 w-4" />
+              ) : (
+                <PanelRightOpen className="h-4 w-4" />
+              )}
+            </Button>
           </div>
+        </div>
 
-          {/* Tabs */}
-          <Tabs defaultValue="ai-assistant" className="flex-1 flex flex-col">
+        {/* Collapsed Icons */}
+        {!isExpanded && (
+          <div className="flex-1 flex flex-col items-center gap-4 pt-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleTabClick("ai-assistant")}
+              className={cn(
+                "h-10 w-10 rounded-lg hover:bg-accent/50 transition-colors",
+                activeTab === "ai-assistant" && "bg-primary/10 text-primary"
+              )}
+              title="AI 도우미"
+            >
+              <Bot className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleTabClick("team-chat")}
+              className={cn(
+                "h-10 w-10 rounded-lg hover:bg-accent/50 transition-colors",
+                activeTab === "team-chat" && "bg-primary/10 text-primary"
+              )}
+              title="팀 소통방"
+            >
+              <MessageCircle className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
+
+        {/* Expanded Content */}
+        {isExpanded && (
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-2 m-4 mb-2">
               <TabsTrigger value="ai-assistant" className="flex items-center gap-2">
                 <Bot className="h-4 w-4" />
@@ -227,16 +263,8 @@ export function UtilitySidebar() {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
+        )}
       </div>
-
-      {/* Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
-          onClick={toggleSidebar}
-        />
-      )}
-    </>
+    </div>
   )
 }
