@@ -6,10 +6,10 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Topbar() {
   return (
-    <header className="h-16 border-b border-border/50 bg-background/80 backdrop-blur-sm flex items-center justify-between px-6 shadow-sm">
+    <header className="h-16 border-b border-border bg-secondary/20 flex items-center justify-between px-6">
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
           현재 병원: <span className="font-semibold text-foreground">서울대학교병원</span>
           <ChevronRight className="h-3 w-3 text-muted-foreground/50" />
           기간: <span className="font-semibold text-foreground">2025년 8월</span>
@@ -32,7 +32,7 @@ export function Topbar() {
         
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+            <div className="h-8 w-8 bg-primary/20 rounded-full flex items-center justify-center text-primary text-xs font-semibold">
               김
             </div>
             <div className="text-sm">

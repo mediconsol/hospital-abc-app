@@ -33,21 +33,21 @@ export function UtilitySidebar() {
   return (
     <div
       className={cn(
-        "bg-card/50 backdrop-blur-sm border-l border-border/50 h-full flex flex-col shadow-sm transition-all duration-300",
+        "bg-secondary/30 border-l border-border h-full flex flex-col transition-all duration-300",
         isExpanded ? "w-80" : "w-16"
       )}
     >
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className={cn(
-          "border-b border-border/50 bg-muted/30 transition-all duration-300",
+          "border-b border-border bg-secondary/50 transition-all duration-300",
           isExpanded ? "p-4" : "p-2"
         )}>
           <div className="flex items-center justify-between">
             {isExpanded && (
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                  <Sparkles className="h-4 w-4 text-white" />
+                <div className="h-8 w-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                  <Sparkles className="h-4 w-4 text-primary" />
                 </div>
                 <h3 className="font-semibold text-lg">유틸리티</h3>
               </div>

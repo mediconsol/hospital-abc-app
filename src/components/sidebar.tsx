@@ -172,11 +172,11 @@ export function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-card/50 backdrop-blur-sm border-r border-border/50 h-full flex flex-col shadow-sm">
-      <div className="p-6 border-b border-border/50">
+    <div className="w-64 bg-secondary/30 border-r border-border h-full flex flex-col">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-            <Building2 className="h-5 w-5 text-white" />
+          <div className="h-10 w-10 bg-primary/20 rounded-lg flex items-center justify-center">
+            <Building2 className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-foreground">
@@ -193,9 +193,9 @@ export function Sidebar() {
         {navigation.map((item) => renderNavItem(item))}
       </nav>
       
-      <div className="p-4 border-t border-border/50 bg-muted/30">
+      <div className="p-4 border-t border-border bg-secondary/50">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <div className="w-2 h-2 bg-primary rounded-full"></div>
           <div>
             <div className="font-medium">서울대학교병원</div>
             <div>2025년 8월 기준</div>

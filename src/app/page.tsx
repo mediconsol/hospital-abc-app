@@ -23,70 +23,70 @@ export default function Home() {
 
       {/* KPI 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200/50 dark:border-green-800/50 hover:shadow-lg transition-all duration-200">
+        <Card className="bg-gradient-to-br from-card to-muted/50 hover:shadow-lg transition-all duration-200 border-border/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-green-700 dark:text-green-300">
+            <CardTitle className="text-sm font-medium text-foreground">
               총 원가
             </CardTitle>
-            <div className="h-8 w-8 bg-green-500/10 rounded-lg flex items-center justify-center">
-              <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <div className="h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
+              <DollarSign className="h-4 w-4 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-800 dark:text-green-200">₩132,000,000</div>
-            <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" />
+            <div className="text-2xl font-bold text-foreground">₩132,000,000</div>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <TrendingUp className="h-3 w-3 text-green-500" />
               전월 대비 +8.5%
             </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg transition-all duration-200">
+        <Card className="bg-gradient-to-br from-card to-muted/50 hover:shadow-lg transition-all duration-200 border-border/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">
+            <CardTitle className="text-sm font-medium text-foreground">
               평균 단가
             </CardTitle>
-            <div className="h-8 w-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
-              <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <div className="h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
+              <Calculator className="h-4 w-4 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-800 dark:text-blue-200">₩14,200</div>
-            <p className="text-xs text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-bold text-foreground">₩14,200</div>
+            <p className="text-xs text-muted-foreground">
               활동 단위당 평균
             </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20 border-purple-200/50 dark:border-purple-800/50 hover:shadow-lg transition-all duration-200">
+        <Card className="bg-gradient-to-br from-card to-muted/50 hover:shadow-lg transition-all duration-200 border-border/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-300">
+            <CardTitle className="text-sm font-medium text-foreground">
               총 FTE
             </CardTitle>
-            <div className="h-8 w-8 bg-purple-500/10 rounded-lg flex items-center justify-center">
-              <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <div className="h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
+              <Users className="h-4 w-4 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-800 dark:text-purple-200">9.8명</div>
-            <p className="text-xs text-purple-600 dark:text-purple-400">
+            <div className="text-2xl font-bold text-foreground">9.8명</div>
+            <p className="text-xs text-muted-foreground">
               전환인력 기준
             </p>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 border-orange-200/50 dark:border-orange-800/50 hover:shadow-lg transition-all duration-200">
+        <Card className="bg-gradient-to-br from-card to-muted/50 hover:shadow-lg transition-all duration-200 border-border/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-orange-700 dark:text-orange-300">
+            <CardTitle className="text-sm font-medium text-foreground">
               수익성 비율
             </CardTitle>
-            <div className="h-8 w-8 bg-orange-500/10 rounded-lg flex items-center justify-center">
-              <TrendingUp className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+            <div className="h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
+              <TrendingUp className="h-4 w-4 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-800 dark:text-orange-200">73.5%</div>
-            <p className="text-xs text-orange-600 dark:text-orange-400">
+            <div className="text-2xl font-bold text-foreground">73.5%</div>
+            <p className="text-xs text-muted-foreground">
               수익 &gt; 원가 비율
             </p>
           </CardContent>
@@ -95,11 +95,11 @@ export default function Home() {
 
       {/* 주요 기능 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-card to-card/50 border-border/50">
+        <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-card to-muted/30 border-border/50">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                <Database className="h-5 w-5 text-white" />
+              <div className="h-10 w-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                <Database className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-lg">기초정보 관리</CardTitle>
@@ -111,17 +111,17 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/30">
+              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/50">
                 <span className="text-sm font-medium">부서</span>
-                <span className="text-sm font-bold text-blue-600">12개</span>
+                <span className="text-sm font-bold text-primary">12개</span>
               </div>
-              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/30">
+              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/50">
                 <span className="text-sm font-medium">활동</span>
-                <span className="text-sm font-bold text-green-600">45개</span>
+                <span className="text-sm font-bold text-primary">45개</span>
               </div>
-              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/30">
+              <div className="flex justify-between items-center p-2 rounded-lg bg-muted/50">
                 <span className="text-sm font-medium">계정</span>
-                <span className="text-sm font-bold text-purple-600">128개</span>
+                <span className="text-sm font-bold text-primary">128개</span>
               </div>
             </div>
           </CardContent>

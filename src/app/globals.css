@@ -33,33 +33,34 @@
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
+  /* VS Code Dark Theme Colors */
+  --background: 0 0% 7.5%; /* #1e1e1e - Main background */
+  --foreground: 0 0% 82%; /* #d4d4d4 - Main text */
 
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
+  --card: 0 0% 9.8%; /* #191919 - Card background */
+  --card-foreground: 0 0% 82%; /* #d4d4d4 - Card text */
 
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 0 0% 11.8%; /* #1f1f1f - Popover background */
+  --popover-foreground: 0 0% 82%; /* #d4d4d4 - Popover text */
 
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
+  --primary: 210 100% 60%; /* #007acc - VS Code blue */
+  --primary-foreground: 0 0% 98%; /* #fafafa - Primary text */
 
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
+  --secondary: 0 0% 15.3%; /* #252526 - Secondary background */
+  --secondary-foreground: 0 0% 70%; /* #b3b3b3 - Secondary text */
 
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: 0 0% 13.7%; /* #2d2d30 - Muted background */
+  --muted-foreground: 0 0% 60%; /* #999999 - Muted text */
 
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 0 0% 17.6%; /* #2d2d30 - Accent background */
+  --accent-foreground: 0 0% 82%; /* #d4d4d4 - Accent text */
 
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 79% 63%; /* #f14c4c - Error red */
+  --destructive-foreground: 0 0% 98%; /* #fafafa - Error text */
 
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --border: 0 0% 20%; /* #333333 - Border color */
+  --input: 0 0% 15.3%; /* #252526 - Input background */
+  --ring: 210 100% 60%; /* #007acc - Focus ring */
 }
 
 * {
