@@ -105,6 +105,7 @@ const navigation: NavItem[] = [
 export function Sidebar() {
   const pathname = usePathname()
   const [expandedItems, setExpandedItems] = useState<string[]>([
+    "병원 설정",
     "기초정보 관리",
     "자료 입력",
     "원가배분",
