@@ -21,7 +21,6 @@ interface Driver {
   code: string
   description: string
   type: "quantitative" | "qualitative" | "time-based" | "resource-based"
-  category: "direct" | "indirect" | "overhead"
   unit: string
   measurementMethod: string
   frequency: "real-time" | "daily" | "weekly" | "monthly"
@@ -77,14 +76,7 @@ export function DriverTable({
     }
   }
 
-  const getCategoryText = (category: string) => {
-    switch (category) {
-      case 'direct': return '직접 동인'
-      case 'indirect': return '간접 동인'
-      case 'overhead': return '일반관리비 동인'
-      default: return '알 수 없음'
-    }
-  }
+  // Category removed - using type-based grouping only
 
   const getTypeText = (type: string) => {
     switch (type) {
@@ -132,7 +124,6 @@ export function DriverTable({
               <TableRow>
                 <TableHead>코드</TableHead>
                 <TableHead>드라이버명</TableHead>
-                <TableHead>분류</TableHead>
                 <TableHead>유형</TableHead>
                 <TableHead>측정단위</TableHead>
                 <TableHead>현재값</TableHead>
@@ -145,7 +136,7 @@ export function DriverTable({
             <TableBody>
               {drivers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                     등록된 드라이버가 없습니다
                   </TableCell>
                 </TableRow>
@@ -154,7 +145,6 @@ export function DriverTable({
                   <TableRow key={driver.id}>
                     <TableCell className="font-mono">{driver.code}</TableCell>
                     <TableCell className="font-medium">{driver.name}</TableCell>
-                    <TableCell>{getCategoryText(driver.category)}</TableCell>
                     <TableCell>{getTypeText(driver.type)}</TableCell>
                     <TableCell>{driver.unit}</TableCell>
                     <TableCell>

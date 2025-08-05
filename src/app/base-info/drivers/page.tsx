@@ -37,7 +37,6 @@ interface Driver {
   code: string
   description: string
   type: "quantitative" | "qualitative" | "time-based" | "resource-based"
-  category: "direct" | "indirect" | "overhead"
   unit: string
   measurementMethod: string
   frequency: "real-time" | "daily" | "weekly" | "monthly"
@@ -63,7 +62,6 @@ const mockDrivers: Driver[] = [
     code: "BED_UTIL",
     description: "병상의 실제 사용률을 측정하여 병실 관련 간접비 배분",
     type: "quantitative",
-    category: "direct",
     unit: "%",
     measurementMethod: "재원일수 / (총 병상수 × 일수) × 100",
     frequency: "daily",
@@ -90,7 +88,6 @@ const mockDrivers: Driver[] = [
     code: "SURGERY_COUNT",
     description: "월간 수술 건수를 기준으로 수술실 운영비 배분",
     type: "quantitative",
-    category: "direct",
     unit: "건",
     measurementMethod: "월간 실시된 총 수술 건수",
     frequency: "monthly",
@@ -118,7 +115,6 @@ const mockDrivers: Driver[] = [
     code: "FTE_HOURS",
     description: "전일제 환산 근무시간을 기준으로 인건비 배분",
     type: "time-based",
-    category: "indirect",
     unit: "시간",
     measurementMethod: "월간 총 근무시간 × FTE 비율",
     frequency: "monthly",
@@ -140,7 +136,6 @@ const mockDrivers: Driver[] = [
     code: "LAB_COUNT",
     description: "임상검사 건수를 기준으로 검사실 운영비 배분",
     type: "quantitative",
-    category: "direct",
     unit: "건",
     measurementMethod: "월간 실시된 총 임상검사 건수",
     frequency: "daily",
@@ -167,7 +162,6 @@ const mockDrivers: Driver[] = [
     code: "POWER_USAGE",
     description: "부서별 전력사용량을 기준으로 유틸리티 비용 배분",
     type: "resource-based",
-    category: "overhead",
     unit: "kWh",
     measurementMethod: "부서별 월간 전력 사용량",
     frequency: "monthly",
@@ -189,7 +183,6 @@ const mockDrivers: Driver[] = [
     code: "SEVERITY_INDEX", 
     description: "환자의 중증도를 기준으로 집중치료 관련 비용 배분",
     type: "qualitative",
-    category: "direct",
     unit: "점수",
     measurementMethod: "환자별 중증도 평가점수 (1-10점 척도)",
     frequency: "daily",
@@ -619,7 +612,6 @@ export default function DriversPage() {
               code: data.code,
               description: data.description,
               type: data.type,
-              category: data.category,
               unit: data.unit,
               measurementMethod: data.measurementMethod,
               frequency: data.frequency,
