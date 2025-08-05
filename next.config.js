@@ -1,14 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Additional stability improvements
-  swcMinify: true,
+  // 기본 설정만 유지
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-  },
-  
-  // Optimize React Server Components
-  experimental: {
-    serverComponentsExternalPackages: [],
   },
 }
 
