@@ -182,6 +182,33 @@ const mockDrivers: Driver[] = [
     variance: 1680,
     createdAt: "2025-07-01",
     updatedAt: "2025-07-31"
+  },
+  {
+    id: "6",
+    name: "중증도 지수",
+    code: "SEVERITY_INDEX", 
+    description: "환자의 중증도를 기준으로 집중치료 관련 비용 배분",
+    type: "qualitative",
+    category: "direct",
+    unit: "점수",
+    measurementMethod: "환자별 중증도 평가점수 (1-10점 척도)",
+    frequency: "daily",
+    status: "active",
+    departments: ["중환자실", "응급실", "수술실"],
+    activities: ["집중간호", "응급처치", "수술지원"],
+    costAllocation: {
+      method: "weighted",
+      weights: {
+        "중환자실": 0.5,
+        "응급실": 0.3,
+        "수술실": 0.2
+      }
+    },
+    currentValue: 6.8,
+    targetValue: 7.2,
+    variance: -0.4,
+    createdAt: "2025-02-15",
+    updatedAt: "2025-07-20"
   }
 ]
 
@@ -388,23 +415,24 @@ export default function DriversPage() {
     setShowTable(false)
   }
 
-  // Group by category for tree structure
-  const categories = [...new Set(drivers.map(driver => driver.category))]
-  const categoryNames = {
-    direct: "직접 동인",
-    indirect: "간접 동인", 
-    overhead: "일반관리비 동인"
+  // Group by type for tree structure (more meaningful grouping)
+  const types = [...new Set(drivers.map(driver => driver.type))]
+  const typeNames = {
+    quantitative: "정량적 드라이버",
+    qualitative: "정성적 드라이버",
+    "time-based": "시간기준 드라이버",
+    "resource-based": "자원기준 드라이버"
   }
 
-  const treeData = categories.map(category => ({
-    id: category,
-    name: categoryNames[category as keyof typeof categoryNames],
+  const treeData = types.map(type => ({
+    id: type,
+    name: typeNames[type as keyof typeof typeNames] || type,
     children: drivers
-      .filter(driver => driver.category === category)
+      .filter(driver => driver.type === type)
       .map(driver => ({
         id: driver.id,
         name: `${driver.code} - ${driver.name}`,
-        type: driver.category,
+        type: driver.type,
         data: driver
       }))
   }))
