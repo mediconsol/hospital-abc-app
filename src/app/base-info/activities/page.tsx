@@ -4,7 +4,7 @@ import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { ActivityTable } from "@/components/tables/activity-table"
 import { mockActivities, mockDepartments } from "@/lib/mock-data"
-import { Activity, CreateActivityForm } from "@/types"
+import { Activity } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -38,7 +38,7 @@ export default function ActivitiesPage() {
     }
   }
 
-  const handleItemSelect = (item: any) => {
+  const handleItemSelect = (item: { id: string; name: string; data: Activity }) => {
     setSelectedActivity(item.data)
     setShowTable(false)
   }

@@ -4,13 +4,13 @@ import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { AccountTable } from "@/components/tables/account-table"
 import { mockAccounts } from "@/lib/mock-data"
-import { Account, CreateAccountForm } from "@/types"
+import { Account } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Calculator, Building2, Calendar, DollarSign } from "lucide-react"
+import { Calculator, Calendar, DollarSign } from "lucide-react"
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>(mockAccounts)
@@ -38,7 +38,7 @@ export default function AccountsPage() {
     }
   }
 
-  const handleItemSelect = (item: any) => {
+  const handleItemSelect = (item: { id: string; name: string; data: Account }) => {
     setSelectedAccount(item.data)
     setShowTable(false)
   }
