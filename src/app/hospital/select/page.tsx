@@ -22,10 +22,10 @@ const mockHospitals: Hospital[] = [
   },
   {
     id: "2", 
-    name: "서울대학교병원 강남센터",
-    address: "서울특별시 강남구 테헤란로 152",
-    phone: "02-2112-5500",
-    type: "종합병원",
+    name: "가족사랑요양병원",
+    address: "전북 김제시",
+    phone: "063-636-3636",
+    type: "요양병원",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z"
   },
@@ -69,12 +69,12 @@ export default function HospitalSelectPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col p-6 space-y-6">
       {/* 헤더 */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">병원 선택</h1>
-          <p className="text-muted-foreground mt-2">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-foreground">병원 선택</h1>
+          <p className="text-muted-foreground">
             ABC 원가계산을 수행할 병원을 선택하세요
           </p>
         </div>

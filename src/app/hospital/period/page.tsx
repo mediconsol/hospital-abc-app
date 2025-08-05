@@ -145,12 +145,12 @@ export default function PeriodSettingPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col p-6 space-y-6">
       {/* 헤더 */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">대상기간 설정</h1>
-          <p className="text-muted-foreground mt-2">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-foreground">대상기간 설정</h1>
+          <p className="text-muted-foreground">
             ABC 원가계산을 수행할 회계기간을 관리하세요
           </p>
         </div>
