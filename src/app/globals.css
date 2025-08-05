@@ -33,6 +33,10 @@
   
   /* Custom main content background */
   --main-content: 0 0% 97%; /* #f7f7f7 - Slightly darker than background */
+  
+  /* Sidebar backgrounds */
+  --sidebar-bg: 210 40% 96%; /* #f1f5f9 - Light gray for sidebar */
+  --sidebar-header-bg: 210 40% 94%; /* #e2e8f0 - Slightly darker for header */
 }
 
 .dark {
@@ -67,6 +71,10 @@
   
   /* Custom main content background */
   --main-content: 0 0% 10.5%; /* #1a1a1a - Slightly lighter than background */
+  
+  /* Sidebar backgrounds for dark mode */
+  --sidebar-bg: 0 0% 12%; /* #1f1f1f - Dark sidebar */
+  --sidebar-header-bg: 0 0% 15%; /* #262626 - Darker header */
 }
 
 * {
@@ -127,4 +135,23 @@ html {
 /* Fix horizontal scrollbar issue */
 html, body {
   overflow-x: hidden;
+}
+
+/* Force proper backgrounds for form elements */
+[data-slot="select-trigger"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+.dark [data-slot="select-trigger"] {
+  background-color: hsl(var(--muted)) !important;
+}
+
+[data-slot="select-content"] {
+  background-color: hsl(var(--popover)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+[data-slot="dialog-content"] {
+  background-color: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
 }

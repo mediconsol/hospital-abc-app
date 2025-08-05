@@ -33,16 +33,20 @@ export function UtilitySidebar() {
   return (
     <div
       className={cn(
-        "bg-secondary/30 border-l border-border h-full flex flex-col transition-all duration-300",
+        "border-l border-border h-full flex flex-col transition-all duration-300",
         isExpanded ? "w-80" : "w-16"
       )}
+      style={{ backgroundColor: 'hsl(var(--sidebar-bg))' }}
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={cn(
-          "border-b border-border bg-secondary/50 transition-all duration-300",
-          isExpanded ? "p-4" : "p-2"
-        )}>
+        <div 
+          className={cn(
+            "border-b border-border transition-all duration-300",
+            isExpanded ? "p-4" : "p-2"
+          )}
+          style={{ backgroundColor: 'hsl(var(--sidebar-header-bg))' }}
+        >
           <div className="flex items-center justify-between">
             {isExpanded && (
               <div className="flex items-center gap-3">

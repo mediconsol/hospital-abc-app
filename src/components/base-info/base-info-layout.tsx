@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, ReactNode } from "react"
-import { Search, Plus, Edit2, Trash2, MoreVertical } from "lucide-react"
+import { Search, Plus, Edit2, Trash2, MoreVertical, ChevronRight, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,6 +32,7 @@ interface BaseInfoLayoutProps {
   onDelete: (item: TreeItem) => void
   children: ReactNode
   searchPlaceholder?: string
+  customTreeRenderer?: (props: { searchTerm: string }) => ReactNode
 }
 
 interface TreeNodeProps {
@@ -59,18 +60,21 @@ function TreeNode({ item, level, selectedId, onSelect, onEdit, onDelete }: TreeN
         onClick={() => onSelect(item)}
       >
         {hasChildren && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-4 w-4 p-0 hover:bg-transparent"
             onClick={(e) => {
               e.stopPropagation()
               setIsExpanded(!isExpanded)
             }}
-            className="p-0.5 hover:bg-accent rounded transition-colors"
           >
-            <div className={cn(
-              "w-3 h-3 border-l-2 border-b-2 border-muted-foreground transition-transform",
-              isExpanded ? "rotate-45" : "-rotate-45"
-            )} />
-          </button>
+            {isExpanded ? (
+              <ChevronDown className="h-3 w-3" />
+            ) : (
+              <ChevronRight className="h-3 w-3" />
+            )}
+          </Button>
         )}
         
         <div className="flex-1 flex items-center justify-between">
@@ -133,7 +137,8 @@ export function BaseInfoLayout({
   onEdit,
   onDelete,
   children,
-  searchPlaceholder = "검색..."
+  searchPlaceholder = "검색...",
+  customTreeRenderer
 }: BaseInfoLayoutProps) {
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -176,19 +181,23 @@ export function BaseInfoLayout({
             </div>
           </CardHeader>
           <CardContent className="flex-1 overflow-auto p-3">
-            <div className="space-y-1">
-              {filteredTreeData.map((item) => (
-                <TreeNode
-                  key={item.id}
-                  item={item}
-                  level={0}
-                  selectedId={selectedItem?.id}
-                  onSelect={onItemSelect}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              ))}
-            </div>
+            {customTreeRenderer ? (
+              customTreeRenderer({ searchTerm })
+            ) : (
+              <div className="space-y-1">
+                {filteredTreeData.map((item) => (
+                  <TreeNode
+                    key={item.id}
+                    item={item}
+                    level={0}
+                    selectedId={selectedItem?.id}
+                    onSelect={onItemSelect}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 

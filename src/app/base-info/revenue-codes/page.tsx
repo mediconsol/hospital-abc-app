@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
+import { RevenueCodeTable } from "@/components/tables/revenue-code-table"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -124,19 +125,34 @@ const mockRevenueCodes: RevenueCode[] = [
 ]
 
 export default function RevenueCodesPage() {
+  const [revenueCodes, setRevenueCodes] = useState<RevenueCode[]>(mockRevenueCodes)
   const [selectedRevenueCode, setSelectedRevenueCode] = useState<RevenueCode | null>(null)
-  const [revenueCodes] = useState<RevenueCode[]>(mockRevenueCodes)
+  const [showTable, setShowTable] = useState(true)
 
   const handleAdd = () => {
     console.log("수익코드 추가")
+    setSelectedRevenueCode(null)
+    setShowTable(false)
   }
 
   const handleEdit = (revenueCode: RevenueCode) => {
-    console.log("수익코드 수정:", revenueCode)
+    setSelectedRevenueCode(revenueCode)
+    setShowTable(false)
   }
 
   const handleDelete = (revenueCode: RevenueCode) => {
-    console.log("수익코드 삭제:", revenueCode)
+    if (confirm(`정말로 '${revenueCode.name}' 수익코드를 삭제하시겠습니까?`)) {
+      setRevenueCodes(revenueCodes.filter(code => code.id !== revenueCode.id))
+      if (selectedRevenueCode?.id === revenueCode.id) {
+        setSelectedRevenueCode(null)
+        setShowTable(true)
+      }
+    }
+  }
+
+  const handleItemSelect = (item: any) => {
+    setSelectedRevenueCode(item.data)
+    setShowTable(false)
   }
 
   // Group by category for tree structure
@@ -195,13 +211,54 @@ export default function RevenueCodesPage() {
       description="병원 수익 분류 체계를 관리하고 코드별 단가를 설정합니다."
       treeData={treeData}
       selectedItem={selectedRevenueCode ? { id: selectedRevenueCode.id, name: selectedRevenueCode.name, data: selectedRevenueCode } : null}
-      onItemSelect={(item) => setSelectedRevenueCode(item.data)}
+      onItemSelect={handleItemSelect}
       onAdd={handleAdd}
-      onEdit={(item) => handleEdit(item.data)}
-      onDelete={(item) => handleDelete(item.data)}
+      onEdit={(item) => handleEdit(item.data as RevenueCode)}
+      onDelete={(item) => handleDelete(item.data as RevenueCode)}
       searchPlaceholder="수익코드 검색..."
     >
-      {selectedRevenueCode ? (
+      {showTable ? (
+        <RevenueCodeTable
+          revenueCodes={revenueCodes}
+          onAdd={(data) => {
+            const newRevenueCode: RevenueCode = {
+              id: `${revenueCodes.length + 1}`,
+              code: data.code,
+              name: data.name,
+              description: data.description,
+              category: data.category,
+              unitPrice: data.unitPrice,
+              currency: data.currency || 'KRW',
+              billingType: data.billingType,
+              status: data.status || 'pending',
+              effectiveDate: data.effectiveDate,
+              expiryDate: data.expiryDate,
+              department: data.department,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              monthlyRevenue: 0,
+              usageCount: 0
+            }
+            setRevenueCodes([...revenueCodes, newRevenueCode])
+          }}
+          onEdit={(id, data) => {
+            setRevenueCodes(revenueCodes.map(code => 
+              code.id === id 
+                ? { 
+                    ...code, 
+                    ...data, 
+                    updatedAt: new Date().toISOString() 
+                  }
+                : code
+            ))
+          }}
+          onDelete={(id) => {
+            if (confirm('정말로 이 수익코드를 삭제하시겠습니까?')) {
+              setRevenueCodes(revenueCodes.filter(code => code.id !== id))
+            }
+          }}
+        />
+      ) : selectedRevenueCode ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>

@@ -222,8 +222,8 @@ export interface SimulationScenario extends BaseEntity {
   period_id: string;
   name: string;
   description?: string;
-  parameters: Record<string, any>; // 시뮬레이션 변수들
-  results?: Record<string, any>; // 계산 결과
+  parameters: Record<string, string | number | boolean>; // 시뮬레이션 변수들
+  results?: Record<string, string | number | boolean>; // 계산 결과
 }
 
 // API 응답 타입

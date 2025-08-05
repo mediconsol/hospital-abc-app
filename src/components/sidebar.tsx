@@ -12,7 +12,12 @@ import {
   BarChart3, 
   Settings,
   ChevronRight,
-  Home
+  Home,
+  Target,
+  GitBranch,
+  Link as LinkIcon,
+  Workflow,
+  Monitor
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -49,6 +54,10 @@ const navigation: NavItem[] = [
       { title: "프로세스 관리", href: "/base-info/processes", icon: Database },
       { title: "수익코드 관리", href: "/base-info/revenue-codes", icon: Database },
       { title: "드라이버 설정", href: "/base-info/drivers", icon: Database },
+      { title: "원가대상 관리", href: "/base-info/cost-objects", icon: Target },
+      { title: "배분단계 관리", href: "/base-info/allocation-rules", icon: GitBranch },
+      { title: "배분기준 매핑", href: "/base-info/driver-mapping", icon: LinkIcon },
+      { title: "단계별 배분룰", href: "/base-info/allocation-workflow", icon: Workflow },
     ],
   },
   {
@@ -62,13 +71,13 @@ const navigation: NavItem[] = [
     ],
   },
   {
-    title: "원가계산",
+    title: "원가배분",
     icon: Calculator,
     children: [
-      { title: "계정-활동 매핑", href: "/calculation/mapping", icon: Calculator },
-      { title: "FTE 계산", href: "/calculation/fte", icon: Calculator },
-      { title: "배부 실행", href: "/calculation/allocation", icon: Calculator },
-      { title: "시뮬레이션", href: "/calculation/simulation", icon: Calculator },
+      { title: "배분 실행", href: "/cost-allocation/execution", icon: Calculator },
+      { title: "결과 조회", href: "/cost-allocation/results", icon: BarChart3 },
+      { title: "분석 리포트", href: "/cost-allocation/analysis", icon: BarChart3 },
+      { title: "과정 추적", href: "/cost-allocation/tracking", icon: Monitor },
     ],
   },
   {
@@ -78,6 +87,7 @@ const navigation: NavItem[] = [
       { title: "부서별 원가", href: "/reports/departments", icon: BarChart3 },
       { title: "활동별 원가", href: "/reports/activities", icon: BarChart3 },
       { title: "수익코드별 단가", href: "/reports/revenue-units", icon: BarChart3 },
+      { title: "원가대상별 원가", href: "/reports/cost-objects", icon: Target },
       { title: "KPI 대시보드", href: "/reports/kpi", icon: BarChart3 },
     ],
   },
@@ -97,7 +107,7 @@ export function Sidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([
     "기초정보 관리",
     "자료 입력",
-    "원가계산",
+    "원가배분",
     "결과 리포트"
   ])
 
@@ -172,7 +182,10 @@ export function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-secondary/30 border-r border-border h-full flex flex-col">
+    <div 
+      className="w-64 border-r border-border h-full flex flex-col"
+      style={{ backgroundColor: 'hsl(var(--sidebar-bg))' }}
+    >
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 bg-primary/20 rounded-lg flex items-center justify-center">
@@ -193,7 +206,7 @@ export function Sidebar() {
         {navigation.map((item) => renderNavItem(item))}
       </nav>
       
-      <div className="p-4 border-t border-border bg-secondary/50">
+      <div className="p-4 border-t border-border">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <div className="w-2 h-2 bg-primary rounded-full"></div>
           <div>
