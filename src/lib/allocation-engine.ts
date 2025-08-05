@@ -2,6 +2,30 @@
 
 import { AllocationStage } from "./allocation-data"
 import { mockDrivers, DriverValue } from "./driver-data"
+
+// Mock driver values for area driver
+const mockDriverValues: DriverValue[] = [
+  {
+    id: "dv_001",
+    driver_id: "driver_area_001",
+    source_id: "dept_001",
+    source_type: "department",
+    value: 250,
+    period_month: 0,
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z"
+  },
+  {
+    id: "dv_002", 
+    driver_id: "driver_area_001",
+    source_id: "dept_002",
+    source_type: "department",
+    value: 180,
+    period_month: 0,
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z"
+  }
+]
 import { mockDepartments } from "./mock-data"
 
 // 배분 실행 결과 인터페이스
@@ -136,23 +160,29 @@ export class AllocationEngine {
 
     // 면적 기준 드라이버 가져오기
     const areaDriver = mockDrivers.find(d => d.category === 'area')
-    if (!areaDriver?.values) {
+    if (!areaDriver) {
       throw new Error('면적 드라이버를 찾을 수 없습니다.')
     }
 
-    const totalArea = areaDriver.values.reduce((sum, v) => sum + v.value, 0)
+    // 해당 드라이버의 값들 가져오기
+    const areaDriverValues = mockDriverValues.filter(dv => dv.driver_id === areaDriver.id)
+    if (areaDriverValues.length === 0) {
+      throw new Error('면적 드라이버 값을 찾을 수 없습니다.')
+    }
+
+    const totalArea = areaDriverValues.reduce((sum, v) => sum + v.value, 0)
 
     for (const cost of commonCosts) {
-      for (const driverValue of areaDriver.values) {
+      for (const driverValue of areaDriverValues) {
         const ratio = driverValue.value / totalArea
         const allocatedAmount = cost.amount * ratio
 
         results.push({
-          id: `rtr_${cost.id}_${driverValue.target_id}`,
+          id: `rtr_${cost.id}_${driverValue.source_id}`,
           stage: 'rtr',
           source_id: cost.id,
           source_type: 'account',
-          target_id: driverValue.target_id,
+          target_id: driverValue.source_id,
           target_type: 'department',
           amount: allocatedAmount,
           driver_id: areaDriver.id,
@@ -192,12 +222,15 @@ export class AllocationEngine {
 
     // 시간 기준 드라이버 가져오기
     const timeDriver = mockDrivers.find(d => d.category === 'time')
-    if (!timeDriver?.values) {
+    if (!timeDriver) {
       throw new Error('시간 드라이버를 찾을 수 없습니다.')
     }
 
+    // 시간 드라이버 값들 가져오기
+    const timeDriverValues = mockDriverValues.filter(dv => dv.driver_id === timeDriver.id)
+
     for (const deptCost of departmentCosts) {
-      const deptTimeValues = timeDriver.values.filter(v => v.target_id.includes(deptCost.id.split('_')[1]))
+      const deptTimeValues = timeDriverValues.filter(v => v.source_id.includes(deptCost.id.split('_')[1]))
       const totalTime = deptTimeValues.reduce((sum, v) => sum + v.value, 0)
 
       for (const timeValue of deptTimeValues) {
@@ -205,11 +238,11 @@ export class AllocationEngine {
         const allocatedAmount = deptCost.amount * ratio
 
         results.push({
-          id: `rta_${deptCost.id}_${timeValue.target_id}`,
+          id: `rta_${deptCost.id}_${timeValue.source_id}`,
           stage: 'rta',
           source_id: deptCost.id,
           source_type: 'department',
-          target_id: timeValue.target_id,
+          target_id: timeValue.source_id,
           target_type: 'activity',
           amount: allocatedAmount,
           driver_id: timeDriver.id,
@@ -356,16 +389,19 @@ export class AllocationEngine {
 
     // 환자수 기준 드라이버
     const patientDriver = mockDrivers.find(d => d.category === 'patient')
-    if (!patientDriver?.values) {
+    if (!patientDriver) {
       throw new Error('환자수 드라이버를 찾을 수 없습니다.')
     }
 
+    // 환자 드라이버 값들 가져오기
+    const patientDriverValues = mockDriverValues.filter(dv => dv.driver_id === patientDriver.id)
+
     for (const activityCost of activityCosts) {
       // 해당 활동과 관련된 원가대상 찾기
-      const relatedPatients = patientDriver.values.filter(v => {
-        if (activityCost.id.includes('internal')) return v.target_id.includes('internal')
-        if (activityCost.id.includes('surgery')) return v.target_id.includes('surgery')
-        if (activityCost.id.includes('imaging')) return v.target_id.includes('radiology')
+      const relatedPatients = patientDriverValues.filter(v => {
+        if (activityCost.id.includes('internal')) return v.source_id.includes('internal')
+        if (activityCost.id.includes('surgery')) return v.source_id.includes('surgery')
+        if (activityCost.id.includes('imaging')) return v.source_id.includes('radiology')
         return false
       })
 
@@ -376,11 +412,11 @@ export class AllocationEngine {
         const allocatedAmount = activityCost.amount * ratio
 
         results.push({
-          id: `atc_${activityCost.id}_${patientValue.target_id}`,
+          id: `atc_${activityCost.id}_${patientValue.source_id}`,
           stage: 'atc',
           source_id: activityCost.id,
           source_type: 'activity',
-          target_id: patientValue.target_id,
+          target_id: patientValue.source_id,
           target_type: 'cost_object',
           amount: allocatedAmount,
           driver_id: patientDriver.id,
