@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,14 +30,8 @@ export function AccountForm({
   account, 
   mode 
 }: AccountFormProps) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateAccountForm>({
-    defaultValues: account ? {
-      code: account.code,
-      name: account.name,
-      category: account.category,
-      is_direct: account.is_direct,
-      description: account.description || '',
-    } : {
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CreateAccountForm>({
+    defaultValues: {
       code: '',
       name: '',
       category: 'salary',
@@ -44,6 +39,25 @@ export function AccountForm({
       description: '',
     }
   })
+
+  // 계정 데이터가 변경되면 폼 필드를 업데이트
+  useEffect(() => {
+    if (account && mode === 'edit') {
+      setValue('code', account.code)
+      setValue('name', account.name)
+      setValue('category', account.category)
+      setValue('is_direct', account.is_direct)
+      setValue('description', account.description || '')
+    } else if (mode === 'create') {
+      reset({
+        code: '',
+        name: '',
+        category: 'salary',
+        is_direct: true,
+        description: '',
+      })
+    }
+  }, [account, mode, setValue, reset])
 
   const handleFormSubmit = (data: CreateAccountForm) => {
     onSubmit(data)

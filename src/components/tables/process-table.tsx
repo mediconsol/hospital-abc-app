@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Plus, Clock, Target } from "lucide-react"
+import { ProcessForm } from "@/components/forms/process-form"
 
 interface ProcessStep {
   id: string
@@ -36,10 +37,24 @@ interface Process {
   updatedAt: string
 }
 
+interface CreateProcessForm {
+  name: string
+  code: string
+  description: string
+  category: string
+  department: string
+  status: "active" | "inactive" | "draft"
+  steps: {
+    name: string
+    description: string
+    estimatedTime: number
+  }[]
+}
+
 interface ProcessTableProps {
   processes: Process[]
-  onAdd: (data: any) => void
-  onEdit: (id: string, data: any) => void
+  onAdd: (data: CreateProcessForm) => void
+  onEdit: (id: string, data: CreateProcessForm) => void
   onDelete: (id: string) => void
 }
 
@@ -50,10 +65,27 @@ export function ProcessTable({
   onDelete 
 }: ProcessTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingProcess, setEditingProcess] = useState<Process | null>(null)
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
 
   const handleAdd = () => {
-    console.log("프로세스 추가")
+    setEditingProcess(null)
+    setFormMode('create')
     setIsFormOpen(true)
+  }
+
+  const handleEdit = (process: Process) => {
+    setEditingProcess(process)
+    setFormMode('edit')
+    setIsFormOpen(true)
+  }
+
+  const handleFormSubmit = (data: CreateProcessForm) => {
+    if (formMode === 'create') {
+      onAdd(data)
+    } else if (editingProcess) {
+      onEdit(editingProcess.id, data)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -143,7 +175,7 @@ export function ProcessTable({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onEdit(process.id, process)}
+                          onClick={() => handleEdit(process)}
                           className="h-8 w-8 p-0"
                         >
                           <Edit className="h-4 w-4" />
@@ -165,6 +197,14 @@ export function ProcessTable({
           </Table>
         </CardContent>
       </Card>
+
+      <ProcessForm
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        process={editingProcess}
+        mode={formMode}
+      />
     </>
   )
 }

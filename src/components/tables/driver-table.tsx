@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Edit, Trash2, Plus, Calculator, Target, TrendingUp } from "lucide-react"
+import { DriverForm } from "@/components/forms/driver-form"
 
 interface Driver {
   id: string
@@ -38,10 +39,26 @@ interface Driver {
   updatedAt: string
 }
 
+interface CreateDriverForm {
+  name: string
+  code: string
+  description: string
+  type: "quantitative" | "qualitative" | "time-based" | "resource-based"
+  unit: string
+  measurementMethod: string
+  frequency: "real-time" | "daily" | "weekly" | "monthly"
+  status: "active" | "inactive" | "testing"
+  departments: string
+  activities: string
+  costAllocationMethod: "equal" | "weighted" | "activity-based"
+  currentValue: number
+  targetValue: number
+}
+
 interface DriverTableProps {
   drivers: Driver[]
-  onAdd: (data: any) => void
-  onEdit: (id: string, data: any) => void
+  onAdd: (data: CreateDriverForm) => void
+  onEdit: (id: string, data: CreateDriverForm) => void
   onDelete: (id: string) => void
 }
 
@@ -52,10 +69,27 @@ export function DriverTable({
   onDelete 
 }: DriverTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingDriver, setEditingDriver] = useState<Driver | null>(null)
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
 
   const handleAdd = () => {
-    console.log("드라이버 추가")
+    setEditingDriver(null)
+    setFormMode('create')
     setIsFormOpen(true)
+  }
+
+  const handleEdit = (driver: Driver) => {
+    setEditingDriver(driver)
+    setFormMode('edit')
+    setIsFormOpen(true)
+  }
+
+  const handleFormSubmit = (data: CreateDriverForm) => {
+    if (formMode === 'create') {
+      onAdd(data)
+    } else if (editingDriver) {
+      onEdit(editingDriver.id, data)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -196,7 +230,7 @@ export function DriverTable({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onEdit(driver.id, driver)}
+                          onClick={() => handleEdit(driver)}
                           className="h-8 w-8 p-0"
                         >
                           <Edit className="h-4 w-4" />
@@ -218,6 +252,14 @@ export function DriverTable({
           </Table>
         </CardContent>
       </Card>
+
+      <DriverForm
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        driver={editingDriver}
+        mode={formMode}
+      />
     </>
   )
 }

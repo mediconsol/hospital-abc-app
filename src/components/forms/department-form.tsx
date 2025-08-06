@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,14 +30,8 @@ export function DepartmentForm({
   department, 
   mode 
 }: DepartmentFormProps) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateDepartmentForm>({
-    defaultValues: department ? {
-      code: department.code,
-      name: department.name,
-      type: department.type,
-      manager: department.manager || '',
-      description: department.description || '',
-    } : {
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CreateDepartmentForm>({
+    defaultValues: {
       code: '',
       name: '',
       type: 'direct',
@@ -44,6 +39,25 @@ export function DepartmentForm({
       description: '',
     }
   })
+
+  // 부서 데이터가 변경되면 폼 필드를 업데이트
+  useEffect(() => {
+    if (department && mode === 'edit') {
+      setValue('code', department.code)
+      setValue('name', department.name)
+      setValue('type', department.type)
+      setValue('manager', department.manager || '')
+      setValue('description', department.description || '')
+    } else if (mode === 'create') {
+      reset({
+        code: '',
+        name: '',
+        type: 'direct',
+        manager: '',
+        description: '',
+      })
+    }
+  }, [department, mode, setValue, reset])
 
   const handleFormSubmit = (data: CreateDepartmentForm) => {
     onSubmit(data)

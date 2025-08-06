@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,14 +30,8 @@ export function ActivityForm({
   activity, 
   mode 
 }: ActivityFormProps) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateActivityForm>({
-    defaultValues: activity ? {
-      code: activity.code,
-      name: activity.name,
-      category: activity.category,
-      department_id: activity.department_id,
-      description: activity.description || '',
-    } : {
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CreateActivityForm>({
+    defaultValues: {
       code: '',
       name: '',
       category: '의료',
@@ -44,6 +39,25 @@ export function ActivityForm({
       description: '',
     }
   })
+
+  // 활동 데이터가 변경되면 폼 필드를 업데이트
+  useEffect(() => {
+    if (activity && mode === 'edit') {
+      setValue('code', activity.code)
+      setValue('name', activity.name)
+      setValue('category', activity.category)
+      setValue('department_id', activity.department_id || '')
+      setValue('description', activity.description || '')
+    } else if (mode === 'create') {
+      reset({
+        code: '',
+        name: '',
+        category: '의료',
+        department_id: '',
+        description: '',
+      })
+    }
+  }, [activity, mode, setValue, reset])
 
   const handleFormSubmit = (data: CreateActivityForm) => {
     onSubmit(data)

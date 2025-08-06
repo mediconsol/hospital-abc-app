@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Plus, DollarSign, TrendingUp } from "lucide-react"
+import { RevenueCodeForm } from "@/components/forms/revenue-code-form"
 
 interface RevenueCode {
   id: string
@@ -33,10 +34,24 @@ interface RevenueCode {
   usageCount?: number
 }
 
+interface CreateRevenueCodeForm {
+  code: string
+  name: string
+  description: string
+  category: string
+  unitPrice: number
+  currency: string
+  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
+  status: "active" | "inactive" | "pending"
+  effectiveDate: string
+  expiryDate: string
+  department: string
+}
+
 interface RevenueCodeTableProps {
   revenueCodes: RevenueCode[]
-  onAdd: (data: any) => void
-  onEdit: (id: string, data: any) => void
+  onAdd: (data: CreateRevenueCodeForm) => void
+  onEdit: (id: string, data: CreateRevenueCodeForm) => void
   onDelete: (id: string) => void
 }
 
@@ -47,10 +62,27 @@ export function RevenueCodeTable({
   onDelete 
 }: RevenueCodeTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingRevenueCode, setEditingRevenueCode] = useState<RevenueCode | null>(null)
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
 
   const handleAdd = () => {
-    console.log("수익코드 추가")
+    setEditingRevenueCode(null)
+    setFormMode('create')
     setIsFormOpen(true)
+  }
+
+  const handleEdit = (revenueCode: RevenueCode) => {
+    setEditingRevenueCode(revenueCode)
+    setFormMode('edit')
+    setIsFormOpen(true)
+  }
+
+  const handleFormSubmit = (data: CreateRevenueCodeForm) => {
+    if (formMode === 'create') {
+      onAdd(data)
+    } else if (editingRevenueCode) {
+      onEdit(editingRevenueCode.id, data)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -158,7 +190,7 @@ export function RevenueCodeTable({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onEdit(code.id, code)}
+                          onClick={() => handleEdit(code)}
                           className="h-8 w-8 p-0"
                         >
                           <Edit className="h-4 w-4" />
@@ -180,6 +212,14 @@ export function RevenueCodeTable({
           </Table>
         </CardContent>
       </Card>
+
+      <RevenueCodeForm
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        revenueCode={editingRevenueCode}
+        mode={formMode}
+      />
     </>
   )
 }

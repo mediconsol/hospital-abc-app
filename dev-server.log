@@ -1,0 +1,27 @@
+
+> hospital-abc-app@0.1.0 dev
+> next dev -p 5611
+
+   ▲ Next.js 15.4.5
+   - Local:        http://localhost:5611
+   - Network:      http://192.168.1.9:5611
+
+ ✓ Starting...
+ ✓ Ready in 4.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 3.5s (765 modules)
+ GET / 200 in 6001ms
+ ○ Compiling /base-info/drivers ...
+ ✓ Compiled /base-info/drivers in 1879ms (970 modules)
+ GET /base-info/drivers 200 in 2551ms
+ GET /base-info/drivers 200 in 33ms
+ GET /base-info/drivers 200 in 29ms
+ ✓ Compiled /base-info/cost-objects in 349ms (977 modules)
+ GET /base-info/cost-objects 200 in 608ms
+ GET /base-info/drivers 200 in 42ms
+ ○ Compiling /admin/permissions ...
+ ✓ Compiled /admin/permissions in 836ms (994 modules)
+ GET /admin/permissions 200 in 981ms
+ ○ Compiling /cost-allocation/results ...
+ ✓ Compiled /cost-allocation/results in 719ms (1015 modules)
+ GET /cost-allocation/results 200 in 996ms

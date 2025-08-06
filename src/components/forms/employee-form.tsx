@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,20 +30,8 @@ export function EmployeeForm({
   employee, 
   mode 
 }: EmployeeFormProps) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateEmployeeForm>({
-    defaultValues: employee ? {
-      employee_number: employee.employee_number,
-      name: employee.name,
-      position: employee.position,
-      department_id: employee.department_id,
-      department_name: employee.department_name || '',
-      email: employee.email || '',
-      phone: employee.phone || '',
-      hire_date: employee.hire_date || '',
-      employment_type: employee.employment_type,
-      salary: employee.salary,
-      description: employee.description || '',
-    } : {
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CreateEmployeeForm>({
+    defaultValues: {
       employee_number: '',
       name: '',
       position: '',
@@ -56,6 +45,37 @@ export function EmployeeForm({
       description: '',
     }
   })
+
+  // 직원 데이터가 변경되면 폼 필드를 업데이트
+  useEffect(() => {
+    if (employee && mode === 'edit') {
+      setValue('employee_number', employee.employee_number)
+      setValue('name', employee.name)
+      setValue('position', employee.position)
+      setValue('department_id', employee.department_id)
+      setValue('department_name', employee.department_name || '')
+      setValue('email', employee.email || '')
+      setValue('phone', employee.phone || '')
+      setValue('hire_date', employee.hire_date || '')
+      setValue('employment_type', employee.employment_type)
+      setValue('salary', employee.salary)
+      setValue('description', employee.description || '')
+    } else if (mode === 'create') {
+      reset({
+        employee_number: '',
+        name: '',
+        position: '',
+        department_id: '',
+        department_name: '',
+        email: '',
+        phone: '',
+        hire_date: '',
+        employment_type: 'full_time',
+        salary: 0,
+        description: '',
+      })
+    }
+  }, [employee, mode, setValue, reset])
 
   const handleFormSubmit = (data: CreateEmployeeForm) => {
     onSubmit(data)

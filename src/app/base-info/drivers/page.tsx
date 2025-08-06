@@ -616,12 +616,12 @@ export default function DriversPage() {
               measurementMethod: data.measurementMethod,
               frequency: data.frequency,
               status: data.status || 'testing',
-              departments: data.departments || [],
-              activities: data.activities || [],
-              costAllocation: data.costAllocation || { method: 'equal' },
+              departments: typeof data.departments === 'string' ? data.departments.split(',').map(d => d.trim()).filter(d => d.length > 0) : [],
+              activities: typeof data.activities === 'string' ? data.activities.split(',').map(a => a.trim()).filter(a => a.length > 0) : [],
+              costAllocation: { method: data.costAllocationMethod },
               currentValue: data.currentValue,
               targetValue: data.targetValue,
-              variance: data.variance,
+              variance: data.targetValue > 0 ? data.currentValue - data.targetValue : undefined,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             }
@@ -632,8 +632,21 @@ export default function DriversPage() {
               driver.id === id 
                 ? { 
                     ...driver, 
-                    ...data, 
-                    updatedAt: new Date().toISOString() 
+                    name: data.name,
+                    code: data.code,
+                    description: data.description,
+                    type: data.type,
+                    unit: data.unit,
+                    measurementMethod: data.measurementMethod,
+                    frequency: data.frequency,
+                    status: data.status,
+                    departments: typeof data.departments === 'string' ? data.departments.split(',').map(d => d.trim()).filter(d => d.length > 0) : [],
+                    activities: typeof data.activities === 'string' ? data.activities.split(',').map(a => a.trim()).filter(a => a.length > 0) : [],
+                    costAllocation: { method: data.costAllocationMethod },
+                    currentValue: data.currentValue,
+                    targetValue: data.targetValue,
+                    variance: data.targetValue > 0 ? data.currentValue - data.targetValue : undefined,
+                    updatedAt: new Date().toISOString()
                   }
                 : driver
             ))

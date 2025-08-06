@@ -197,6 +197,15 @@ export default function ProcessesPage() {
         <ProcessTable
           processes={processes}
           onAdd={(data) => {
+            const processSteps = data.steps.map((step, index) => ({
+              id: `step-${index + 1}`,
+              name: step.name,
+              description: step.description,
+              estimatedTime: step.estimatedTime,
+              dependencies: []
+            }))
+            const totalTime = processSteps.reduce((total, step) => total + step.estimatedTime, 0)
+
             const newProcess: Process = {
               id: `${processes.length + 1}`,
               name: data.name,
@@ -204,20 +213,36 @@ export default function ProcessesPage() {
               description: data.description,
               category: data.category,
               department: data.department,
-              steps: data.steps || [],
-              totalEstimatedTime: data.totalEstimatedTime || 0,
-              status: data.status || 'draft',
+              steps: processSteps,
+              totalEstimatedTime: totalTime,
+              status: data.status,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             }
             setProcesses([...processes, newProcess])
           }}
           onEdit={(id, data) => {
+            const processSteps = data.steps.map((step, index) => ({
+              id: `step-${index + 1}`,
+              name: step.name,
+              description: step.description,
+              estimatedTime: step.estimatedTime,
+              dependencies: []
+            }))
+            const totalTime = processSteps.reduce((total, step) => total + step.estimatedTime, 0)
+
             setProcesses(processes.map(process => 
               process.id === id 
                 ? { 
                     ...process, 
-                    ...data, 
+                    name: data.name,
+                    code: data.code,
+                    description: data.description,
+                    category: data.category,
+                    department: data.department,
+                    status: data.status,
+                    steps: processSteps,
+                    totalEstimatedTime: totalTime,
                     updatedAt: new Date().toISOString() 
                   }
                 : process
