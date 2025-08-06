@@ -124,10 +124,10 @@ export default function EmployeesPage() {
 
   // 트리 데이터 생성 (부서별로 그룹화)
   const buildTreeData = () => {
-    const departments = [...new Set(employees.map(emp => emp.department_name))]
+    const departments = [...new Set(employees.map(emp => emp.department_name || '미분류'))]
     
     return departments.map(dept => {
-      const deptEmployees = employees.filter(emp => emp.department_name === dept)
+      const deptEmployees = employees.filter(emp => (emp.department_name || '미분류') === dept)
       return {
         id: dept,
         name: `${dept} (${deptEmployees.length}명)`,
@@ -232,8 +232,8 @@ export default function EmployeesPage() {
                   <Badge className={getEmploymentTypeBadgeColor(selectedEmployee.employment_type)}>
                     {getEmploymentTypeLabel(selectedEmployee.employment_type)}
                   </Badge>
-                  <Badge variant={selectedEmployee.is_active ? "default" : "secondary"}>
-                    {selectedEmployee.is_active ? '재직' : '퇴직'}
+                  <Badge variant={(selectedEmployee.is_active ?? true) ? "default" : "secondary"}>
+                    {(selectedEmployee.is_active ?? true) ? '재직' : '퇴직'}
                   </Badge>
                 </div>
               </div>
@@ -267,7 +267,7 @@ export default function EmployeesPage() {
                   <Label htmlFor="department">부서</Label>
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-muted-foreground" />
-                    <Input id="department" value={selectedEmployee.department_name} readOnly />
+                    <Input id="department" value={selectedEmployee.department_name || '미분류'} readOnly />
                   </div>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export default function EmployeesPage() {
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="hire_date" 
-                      value={new Date(selectedEmployee.hire_date).toLocaleDateString('ko-KR')} 
+                      value={selectedEmployee.hire_date ? new Date(selectedEmployee.hire_date).toLocaleDateString('ko-KR') : '미등록'} 
                       readOnly 
                     />
                   </div>

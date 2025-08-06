@@ -36,7 +36,9 @@ export default function SalaryDataPage() {
   const totalEmployees = employees.length
   const totalSalary = employees.reduce((sum, emp) => sum + emp.salary, 0)
   const avgSalary = totalSalary / totalEmployees
-  const totalWorkHours = employees.reduce((sum, emp) => sum + emp.work_hours, 0)
+  // 월 160시간 기준으로 계산 (주 40시간 * 4주)
+  const standardWorkHours = 160
+  const totalWorkHours = employees.length * standardWorkHours
   const avgHourlyRate = totalSalary / totalWorkHours
 
   // 직종별 통계
@@ -47,7 +49,7 @@ export default function SalaryDataPage() {
     }
     acc[position].count++
     acc[position].totalSalary += emp.salary
-    acc[position].totalHours += emp.work_hours
+    acc[position].totalHours += standardWorkHours // 표준 근무시간 사용
     return acc
   }, {} as Record<string, { count: number; totalSalary: number; totalHours: number }>)
 
@@ -298,7 +300,7 @@ export default function SalaryDataPage() {
                     <div>
                       <div className="font-medium">{employee.name}</div>
                       <div className="text-sm text-muted-foreground">
-                        {employee.position} • {employee.emp_no}
+                        {employee.position} • {employee.employee_number}
                       </div>
                     </div>
                     <Badge 
@@ -317,7 +319,7 @@ export default function SalaryDataPage() {
                     <div>
                       <span className="text-muted-foreground">근무시간</span>
                       <div className="font-semibold">
-                        {employee.work_hours}시간
+                        160시간
                       </div>
                     </div>
                   </div>

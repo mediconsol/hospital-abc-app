@@ -112,7 +112,7 @@ export function EmployeeTable({
                     <TableCell className="font-mono">{employee.employee_number}</TableCell>
                     <TableCell className="font-medium">{employee.name}</TableCell>
                     <TableCell>{employee.position}</TableCell>
-                    <TableCell>{employee.department_name}</TableCell>
+                    <TableCell>{employee.department_name || '미분류'}</TableCell>
                     <TableCell>
                       <Badge className={getEmploymentTypeBadgeColor(employee.employment_type)}>
                         {getEmploymentTypeLabel(employee.employment_type)}
@@ -120,8 +120,8 @@ export function EmployeeTable({
                     </TableCell>
                     <TableCell>{formatSalary(employee.salary)}</TableCell>
                     <TableCell>
-                      <Badge variant={employee.is_active ? "default" : "secondary"}>
-                        {employee.is_active ? '재직' : '퇴직'}
+                      <Badge variant={(employee.is_active ?? true) ? "default" : "secondary"}>
+                        {(employee.is_active ?? true) ? '재직' : '퇴직'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">

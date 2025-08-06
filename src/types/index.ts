@@ -98,14 +98,14 @@ export interface Employee extends BaseEntity {
   name: string;
   position: string; // 직책/직급
   department_id: string;
-  department_name: string; // 부서명 추가
+  department_name?: string; // 부서명 추가 (옵셔널)
   email?: string; // 이메일 추가
   phone?: string; // 연락처 추가
-  hire_date: string; // 입사일 추가
+  hire_date?: string; // 입사일 추가 (옵셔널)
   employment_type: 'full_time' | 'part_time' | 'contract';
   salary: number; // 연봉
   description?: string; // 설명 추가
-  is_active: boolean; // 재직 여부 추가
+  is_active?: boolean; // 재직 여부 추가 (옵셔널, 기본값 true)
 }
 
 export interface WorkRatio extends BaseEntity {
@@ -278,10 +278,10 @@ export interface CreateEmployeeForm {
   name: string;
   position: string;
   department_id: string;
-  department_name: string;
+  department_name?: string;
   email?: string;
   phone?: string;
-  hire_date: string;
+  hire_date?: string;
   employment_type: 'full_time' | 'part_time' | 'contract';
   salary: number;
   description?: string;

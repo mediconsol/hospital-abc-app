@@ -58,7 +58,7 @@ export default function WorkRatioPage() {
         ? { 
             ...wr, 
             ratio: newRatio / 100, 
-            hours: selectedEmp ? Math.round((newRatio / 100) * selectedEmp.work_hours) : 0 
+            hours: selectedEmp ? Math.round((newRatio / 100) * 160) : 0 // 표준 근무시간 160시간 
           }
         : wr
     ))
@@ -113,7 +113,8 @@ export default function WorkRatioPage() {
     }
 
     const maxHours = workRatioValidationRules.maxHoursByPosition[employee.position]
-    if (maxHours && employee.work_hours > maxHours) {
+    const standardWorkHours = 160 // 표준 근무시간
+    if (maxHours && standardWorkHours > maxHours) {
       return {
         valid: false,
         message: `${employee.position} 직종의 최대 근무시간(${maxHours}시간)을 초과합니다.`
@@ -245,7 +246,7 @@ export default function WorkRatioPage() {
                   <div className="space-y-2">
                     <div className="font-medium text-lg">{selectedEmp.name}</div>
                     <div className="text-sm text-muted-foreground">
-                      {selectedEmp.position} • {selectedEmp.emp_no}
+                      {selectedEmp.position} • {selectedEmp.employee_number}
                     </div>
                     <Badge variant="outline">
                       {getDepartmentName(selectedEmp.department_id)}
@@ -262,13 +263,13 @@ export default function WorkRatioPage() {
                     <div className="space-y-1">
                       <span className="text-muted-foreground">월 근무시간</span>
                       <div className="font-semibold">
-                        {selectedEmp.work_hours}시간
+                        160시간
                       </div>
                     </div>
                     <div className="space-y-1">
                       <span className="text-muted-foreground">시간당 단가</span>
                       <div className="font-semibold text-green-600">
-                        {Math.round(selectedEmp.salary / selectedEmp.work_hours).toLocaleString()}원
+                        {Math.round(selectedEmp.salary / 160).toLocaleString()}원
                       </div>
                     </div>
                     <div className="space-y-1">
@@ -315,7 +316,7 @@ export default function WorkRatioPage() {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">배분 시간</span>
                     <span className="font-semibold">
-                      {totalHours} / {selectedEmp.work_hours}시간
+                      {totalHours} / 160시간
                     </span>
                   </div>
                   

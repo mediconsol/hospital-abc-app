@@ -35,10 +35,10 @@ export function EmployeeForm({
       name: employee.name,
       position: employee.position,
       department_id: employee.department_id,
-      department_name: employee.department_name,
+      department_name: employee.department_name || '',
       email: employee.email || '',
       phone: employee.phone || '',
-      hire_date: employee.hire_date,
+      hire_date: employee.hire_date || '',
       employment_type: employee.employment_type,
       salary: employee.salary,
       description: employee.description || '',
@@ -121,15 +121,12 @@ export function EmployeeForm({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="department_name">부서 *</Label>
+              <Label htmlFor="department_name">부서</Label>
               <Input
                 id="department_name"
-                {...register("department_name", { required: "부서는 필수입니다" })}
+                {...register("department_name")}
                 placeholder="내과"
               />
-              {errors.department_name && (
-                <p className="text-sm text-red-500">{errors.department_name.message}</p>
-              )}
             </div>
           </div>
 
@@ -156,15 +153,12 @@ export function EmployeeForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="hire_date">입사일 *</Label>
+              <Label htmlFor="hire_date">입사일</Label>
               <Input
                 id="hire_date"
                 type="date"
-                {...register("hire_date", { required: "입사일은 필수입니다" })}
+                {...register("hire_date")}
               />
-              {errors.hire_date && (
-                <p className="text-sm text-red-500">{errors.hire_date.message}</p>
-              )}
             </div>
             
             <div className="space-y-2">
