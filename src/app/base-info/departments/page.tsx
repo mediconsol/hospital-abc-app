@@ -4,14 +4,14 @@ import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { DepartmentTable } from "@/components/tables/department-table"
 import { HierarchicalTree } from "@/components/tree/hierarchical-tree"
-import { mockDepartments } from "@/lib/mock-data"
-import { Department, CreateDepartmentForm } from "@/types"
+import { mockDepartments, mockEmployees } from "@/lib/mock-data"
+import { Department, CreateDepartmentForm, Employee } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Building2, User, Calendar, Hash } from "lucide-react"
+import { Building2, User, Calendar, Hash, Users, Mail, Phone, Briefcase } from "lucide-react"
 
 interface TreeNode {
   id: string
@@ -153,6 +153,33 @@ export default function DepartmentsPage() {
 
   const getChildrenCount = (departmentId: string) => {
     return departments.filter(d => d.parent_id === departmentId).length
+  }
+
+  // 해당 부서의 직원 목록 가져오기
+  const getDepartmentEmployees = (departmentId: string) => {
+    return mockEmployees.filter(emp => emp.department_id === departmentId)
+  }
+
+  const getEmploymentTypeLabel = (type: string) => {
+    switch (type) {
+      case 'full_time': return '정규직'
+      case 'part_time': return '파트타임'
+      case 'contract': return '계약직'
+      default: return type
+    }
+  }
+
+  const getEmploymentTypeBadgeColor = (type: string) => {
+    switch (type) {
+      case 'full_time': return 'bg-green-500/10 text-green-600 border-green-500/20'
+      case 'part_time': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
+      case 'contract': return 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20'
+    }
+  }
+
+  const formatSalary = (amount: number) => {
+    return new Intl.NumberFormat('ko-KR').format(amount) + '원'
   }
 
   return (
@@ -335,6 +362,83 @@ export default function DepartmentsPage() {
                 {getChildrenCount(selectedDepartment.id) === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
                     <div className="text-sm">하위 부서가 없습니다</div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 부서 직원 정보 */}
+          <Card>
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">부서 직원</h3>
+                <Badge variant="outline">{getDepartmentEmployees(selectedDepartment.id).length}명</Badge>
+              </div>
+              
+              <div className="space-y-3">
+                {getDepartmentEmployees(selectedDepartment.id).map(employee => (
+                  <div 
+                    key={employee.id}
+                    className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
+                        <User className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <div className="font-medium">{employee.name}</div>
+                          <Badge className={getEmploymentTypeBadgeColor(employee.employment_type)} variant="outline">
+                            {getEmploymentTypeLabel(employee.employment_type)}
+                          </Badge>
+                          {(employee.is_active ?? true) && (
+                            <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-500/20">
+                              재직
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                          <div className="flex items-center gap-1">
+                            <Briefcase className="h-3 w-3" />
+                            {employee.position}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Hash className="h-3 w-3" />
+                            {employee.employee_number}
+                          </div>
+                          {employee.email && (
+                            <div className="flex items-center gap-1">
+                              <Mail className="h-3 w-3" />
+                              {employee.email}
+                            </div>
+                          )}
+                          {employee.phone && (
+                            <div className="flex items-center gap-1">
+                              <Phone className="h-3 w-3" />
+                              {employee.phone}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-semibold text-green-600">
+                        {formatSalary(employee.salary)}
+                      </div>
+                      {employee.hire_date && (
+                        <div className="text-xs text-muted-foreground">
+                          입사: {new Date(employee.hire_date).toLocaleDateString('ko-KR')}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                
+                {getDepartmentEmployees(selectedDepartment.id).length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Users className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                    <div className="text-sm">이 부서에 소속된 직원이 없습니다</div>
                   </div>
                 )}
               </div>
