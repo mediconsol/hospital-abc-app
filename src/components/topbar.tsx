@@ -10,7 +10,7 @@ export function Topbar() {
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-          현재 병원: <span className="font-semibold text-foreground">서울대학교병원</span>
+          현재 병원: <span className="font-semibold text-foreground">가족사랑요양병원</span>
           <ChevronRight className="h-3 w-3 text-muted-foreground/50" />
           기간: <span className="font-semibold text-foreground">2025년 8월</span>
         </div>

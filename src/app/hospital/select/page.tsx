@@ -13,19 +13,19 @@ import { Hospital } from "@/types"
 const mockHospitals: Hospital[] = [
   {
     id: "1",
-    name: "서울대학교병원",
-    address: "서울특별시 종로구 대학로 101",
-    phone: "02-2072-2114",
-    type: "종합병원",
+    name: "가족사랑요양병원",
+    address: "서울특별시 강남구 테헤란로 123",
+    phone: "02-1234-5678",
+    type: "요양병원",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z"
   },
   {
     id: "2", 
-    name: "가족사랑요양병원",
-    address: "전북 김제시",
-    phone: "063-636-3636",
-    type: "요양병원",
+    name: "서울아산병원",
+    address: "서울특별시 송파구 올림픽로43길 88",
+    phone: "02-3010-3114",
+    type: "종합병원",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z"
   },
@@ -63,6 +63,7 @@ export default function HospitalSelectPage() {
     switch (type) {
       case "종합병원": return "bg-blue-500/10 text-blue-600 border-blue-500/20"
       case "전문병원": return "bg-green-500/10 text-green-600 border-green-500/20"
+      case "요양병원": return "bg-orange-500/10 text-orange-600 border-orange-500/20"
       case "의원": return "bg-purple-500/10 text-purple-600 border-purple-500/20"
       default: return "bg-gray-500/10 text-gray-600 border-gray-500/20"
     }

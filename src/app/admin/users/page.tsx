@@ -80,7 +80,7 @@ const mockUsers: User[] = [
     phone: '02-1234-0000',
     role: 'admin',
     hospital_id: '1',
-    hospital_name: '서울대학교병원',
+    hospital_name: '가족사랑요양병원',
     is_active: true,
     last_login: '2025-01-06T10:30:00Z',
     created_at: '2024-01-01T00:00:00Z',
@@ -93,7 +93,7 @@ const mockUsers: User[] = [
     phone: '02-1234-0001',
     role: 'manager',
     hospital_id: '1',
-    hospital_name: '서울대학교병원',
+    hospital_name: '가족사랑요양병원',
     department_id: '11',
     department_name: '내과',
     is_active: true,
@@ -108,7 +108,7 @@ const mockUsers: User[] = [
     phone: '02-1234-0002',
     role: 'viewer',
     hospital_id: '1',
-    hospital_name: '서울대학교병원',
+    hospital_name: '가족사랑요양병원',
     department_id: '21',
     department_name: '간호부',
     is_active: true,
@@ -122,7 +122,7 @@ const mockUsers: User[] = [
     name: '이비활성',
     role: 'viewer',
     hospital_id: '1',
-    hospital_name: '서울대학교병원',
+    hospital_name: '가족사랑요양병원',
     is_active: false,
     created_at: '2024-02-01T00:00:00Z',
     updated_at: '2024-12-01T00:00:00Z'
@@ -194,7 +194,7 @@ export default function UsersPage() {
         phone: data.phone,
         role: data.role,
         hospital_id: data.hospital_id,
-        hospital_name: '서울대학교병원', // 실제로는 hospital_id로 조회
+        hospital_name: '가족사랑요양병원', // 실제로는 hospital_id로 조회
         department_id: data.department_id,
         department_name: data.department_id ? '해당부서' : undefined, // 실제로는 department_id로 조회
         is_active: true,
@@ -514,7 +514,7 @@ export default function UsersPage() {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               >
                 <option value="">병원 선택</option>
-                <option value="1">서울대학교병원</option>
+                <option value="1">가족사랑요양병원</option>
               </select>
               {errors.hospital_id && (
                 <p className="text-sm text-red-500">{errors.hospital_id.message}</p>

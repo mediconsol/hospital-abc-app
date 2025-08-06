@@ -213,7 +213,7 @@ export function Sidebar() {
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <div className="w-2 h-2 bg-primary rounded-full"></div>
           <div>
-            <div className="font-medium">서울대학교병원</div>
+            <div className="font-medium">가족사랑요양병원</div>
             <div>2025년 8월 기준</div>
           </div>
         </div>

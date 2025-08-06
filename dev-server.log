@@ -25,3 +25,44 @@
  ○ Compiling /cost-allocation/results ...
  ✓ Compiled /cost-allocation/results in 719ms (1015 modules)
  GET /cost-allocation/results 200 in 996ms
+ ✓ Compiled in 1248ms (1020 modules)
+ GET /cost-allocation/results 200 in 450ms
+ GET /cost-allocation/results 200 in 362ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 551ms (604 modules)
+ GET /favicon.ico 200 in 2035ms
+ GET /cost-allocation/results 200 in 387ms
+ GET /favicon.ico 200 in 12ms
+ GET /cost-allocation/results 200 in 183ms
+ GET /favicon.ico 200 in 11ms
+ GET /cost-allocation/results 200 in 171ms
+ GET /favicon.ico 200 in 11ms
+ GET /cost-allocation/results 200 in 251ms
+ GET /favicon.ico 200 in 21ms
+ GET /cost-allocation/results 200 in 260ms
+ GET /favicon.ico 200 in 12ms
+ ○ Compiling /hospital/select ...
+ ✓ Compiled /hospital/select in 612ms (1036 modules)
+ GET /hospital/select 200 in 846ms
+ GET / 200 in 98ms
+ ○ Compiling /base-info/departments ...
+ ✓ Compiled /base-info/departments in 775ms (1061 modules)
+ GET /base-info/departments 200 in 1067ms
+ ✓ Compiled /base-info/employees in 389ms (1074 modules)
+ GET /base-info/employees 200 in 618ms
+ ✓ Compiled /base-info/revenue-codes in 425ms (1093 modules)
+ GET /base-info/revenue-codes 200 in 661ms
+ GET /base-info/employees 200 in 27ms
+ ○ Compiling /reports/activities ...
+ ✓ Compiled /reports/activities in 1130ms (1062 modules)
+ GET /reports/activities 200 in 2782ms
+ ○ Compiling /admin/users ...
+ ✓ Compiled /admin/users in 640ms (1061 modules)
+ GET /admin/users 200 in 755ms
+ GET /admin/users 200 in 309ms
+ ✓ Compiled /favicon.ico in 208ms (615 modules)
+ GET /favicon.ico 200 in 1432ms
+ GET /admin/users 200 in 362ms
+ GET /favicon.ico 200 in 15ms
+ GET /admin/users 200 in 194ms
+ GET /favicon.ico 200 in 11ms
