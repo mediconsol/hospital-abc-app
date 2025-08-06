@@ -66,3 +66,38 @@
  GET /favicon.ico 200 in 15ms
  GET /admin/users 200 in 194ms
  GET /favicon.ico 200 in 11ms
+ ✓ Compiled in 1363ms (1065 modules)
+ GET /admin/users 200 in 365ms
+ ✓ Compiled in 905ms (1048 modules)
+ GET /admin/users 200 in 1575ms
+ ✓ Compiled in 495ms (470 modules)
+ GET /admin/users 200 in 348ms
+ ✓ Compiled in 458ms (470 modules)
+ GET /admin/users 200 in 44ms
+ ✓ Compiled in 304ms (470 modules)
+ GET /admin/users 200 in 284ms
+ ✓ Compiled in 349ms (470 modules)
+ GET /admin/users 200 in 40ms
+ ✓ Compiled in 943ms (1048 modules)
+ GET /admin/users 200 in 313ms
+ ✓ Compiled /hospital/select in 481ms (585 modules)
+ GET /hospital/select 200 in 756ms
+ GET /hospital/select 200 in 16ms
+ GET /hospital/select 200 in 16ms
+ GET /hospital/select 200 in 19ms
+ ✓ Compiled in 1149ms (1044 modules)
+ GET /hospital/select 200 in 208ms
+ ✓ Compiled in 754ms (1044 modules)
+ GET /hospital/select 200 in 207ms
+ ✓ Compiled in 873ms (1044 modules)
+ GET /hospital/select 200 in 214ms
+ ✓ Compiled in 1046ms (1044 modules)
+ GET /hospital/select 200 in 213ms
+ ✓ Compiled in 1242ms (1044 modules)
+ GET /hospital/select 200 in 108ms
+ ✓ Compiled in 1070ms (1044 modules)
+ GET /hospital/select 200 in 224ms
+ ✓ Compiled in 769ms (1044 modules)
+ GET /hospital/select 200 in 271ms
+ ✓ Compiled in 893ms (1044 modules)
+ GET /hospital/select 200 in 216ms
