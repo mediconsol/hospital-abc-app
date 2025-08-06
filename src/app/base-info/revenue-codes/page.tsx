@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { RevenueCodeTable } from "@/components/tables/revenue-code-table"
+import { RevenueCode } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,32 +13,6 @@ import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { TrendingUp, Calendar, Tag, Edit2, Save, X } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-interface RevenueCode {
-  id: string
-  code: string
-  name: string
-  description: string
-  category: string
-  unitPrice: number
-  currency: string
-  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  is_active?: boolean
-  effectiveDate: string
-  expiryDate: string | null
-  department: string
-  createdAt: string
-  updatedAt: string
-  monthlyRevenue?: number
-  usageCount?: number
-  // 추가 필드들
-  majorCategory?: string    // 대분류명
-  minorCategory?: string    // 중분류명
-  feeType?: string          // 수가구분명
-  paymentType?: string      // 지불유형명
-  ediCode?: string          // EDI코드
-  relativeValue?: number    // 상대가치점수
-}
 
 // Mock data
 const mockRevenueCodes: RevenueCode[] = [
@@ -300,21 +275,30 @@ export default function RevenueCodesPage() {
           onAdd={(data) => {
             const newRevenueCode: RevenueCode = {
               id: `${revenueCodes.length + 1}`,
+              hospital_id: '1',
+              period_id: '1',
               code: data.code,
               name: data.name,
               description: data.description,
               category: data.category,
+              unit_price: data.unitPrice || 0,
               unitPrice: data.unitPrice,
               currency: data.currency || 'KRW',
               billingType: data.billingType,
-              status: data.status || 'pending',
+              is_active: data.is_active !== false,
               effectiveDate: data.effectiveDate,
               expiryDate: data.expiryDate,
               department: data.department,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
               monthlyRevenue: 0,
-              usageCount: 0
+              usageCount: 0,
+              majorCategory: data.majorCategory,
+              minorCategory: data.minorCategory,
+              feeType: data.feeType,
+              paymentType: data.paymentType,
+              ediCode: data.ediCode,
+              relativeValue: data.relativeValue
             }
             setRevenueCodes([...revenueCodes, newRevenueCode])
           }}
@@ -324,7 +308,7 @@ export default function RevenueCodesPage() {
                 ? { 
                     ...code, 
                     ...data, 
-                    updatedAt: new Date().toISOString() 
+                    updated_at: new Date().toISOString() 
                   }
                 : code
             ))

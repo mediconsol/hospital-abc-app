@@ -223,3 +223,435 @@ Tree Data: 1
  ✓ Compiled /_not-found in 2.7s (1295 modules)
  ✓ Compiled /favicon.ico in 491ms (691 modules)
  GET /favicon.ico 200 in 1944ms
+ GET /base-info/departments 200 in 77ms
+ GET /base-info/departments 200 in 28ms
+ GET /base-info/departments 200 in 19ms
+ GET /base-info/departments 200 in 22ms
+ GET /base-info/departments 200 in 23ms
+ ○ Compiling / ...
+ ✓ Compiled / in 527ms (693 modules)
+ GET / 200 in 2200ms
+ GET /base-info/departments 200 in 25ms
+ GET /base-info/departments 200 in 18ms
+ GET /base-info/departments 200 in 19ms
+ GET /base-info/departments 200 in 18ms
+ GET /base-info/departments 200 in 23ms
+ ○ Compiling /base-info/employees ...
+ ✓ Compiled /base-info/employees in 766ms (701 modules)
+ GET /base-info/employees 200 in 1026ms
+ GET /base-info/departments 200 in 23ms
+ GET /base-info/departments 200 in 16ms
+ GET /base-info/employees 200 in 18ms
+ GET /base-info/employees 200 in 15ms
+ GET /base-info/departments 200 in 16ms
+ GET /base-info/activities 200 in 29ms
+ GET /base-info/activities 200 in 17ms
+ GET /base-info/departments 200 in 19ms
+ GET /base-info/employees 200 in 21ms
+ GET /base-info/departments 200 in 19ms
+ GET /base-info/departments 200 in 17ms
+ GET /base-info/employees 200 in 19ms
+ GET /base-info/departments 200 in 21ms
+ GET /base-info/employees 200 in 19ms
+ GET /base-info/activities 200 in 18ms
+ GET /base-info/accounts 200 in 32ms
+ ○ Compiling /base-info/processes ...
+ ✓ Compiled /base-info/processes in 1392ms (1312 modules)
+ GET /base-info/processes 200 in 1751ms
+ GET /base-info/processes 200 in 16ms
+ ✓ Compiled /base-info/revenue-codes in 390ms (697 modules)
+ GET /base-info/revenue-codes 200 in 619ms
+ ✓ Compiled /base-info/drivers in 433ms (711 modules)
+ GET /base-info/drivers 200 in 734ms
+ GET /base-info/cost-objects 200 in 33ms
+ GET /base-info/drivers 200 in 17ms
+ GET /base-info/revenue-codes 200 in 25ms
+ GET /base-info/processes 200 in 23ms
+ GET /base-info/revenue-codes 200 in 17ms
+ GET /base-info/processes 200 in 27ms
+ GET /base-info/employees 200 in 34ms
+ ✓ Compiled in 1669ms (1313 modules)
+ GET /base-info/employees 200 in 444ms
+ ✓ Compiled in 902ms (1313 modules)
+ GET /base-info/employees 200 in 284ms
+ ✓ Compiled in 908ms (1313 modules)
+ GET /base-info/employees 200 in 293ms
+ ✓ Compiled in 1224ms (1315 modules)
+ GET /base-info/employees 200 in 359ms
+ ✓ Compiled in 857ms (1315 modules)
+ GET /base-info/employees 200 in 272ms
+ GET /base-info/cost-objects 200 in 31ms
+ ✓ Compiled in 309ms (641 modules)
+ GET /base-info/cost-objects 200 in 256ms
+ ✓ Compiled in 337ms (641 modules)
+ GET /base-info/cost-objects 200 in 44ms
+ ✓ Compiled in 303ms (641 modules)
+ GET /base-info/cost-objects 200 in 361ms
+ ✓ Compiled in 475ms (641 modules)
+ GET /base-info/cost-objects 200 in 45ms
+ ✓ Compiled in 392ms (641 modules)
+ GET /base-info/cost-objects 200 in 263ms
+ ✓ Compiled in 357ms (641 modules)
+ GET /base-info/cost-objects 200 in 42ms
+ ✓ Compiled in 454ms (641 modules)
+ GET /base-info/cost-objects 200 in 351ms
+ ✓ Compiled in 488ms (641 modules)
+ GET /base-info/cost-objects 200 in 37ms
+ ✓ Compiled in 298ms (641 modules)
+ GET /base-info/cost-objects 200 in 272ms
+ ✓ Compiled in 369ms (641 modules)
+ GET /base-info/cost-objects 200 in 37ms
+ ✓ Compiled in 1164ms (1315 modules)
+ GET /base-info/cost-objects 200 in 127ms
+ ✓ Compiled in 988ms (1315 modules)
+ GET /base-info/cost-objects 200 in 145ms
+ ✓ Compiled in 309ms (641 modules)
+ GET /base-info/cost-objects 200 in 387ms
+ ✓ Compiled in 501ms (641 modules)
+ GET /base-info/cost-objects 200 in 47ms
+ ✓ Compiled in 1300ms (1315 modules)
+ GET /base-info/cost-objects 200 in 95ms
+ ✓ Compiled in 1049ms (1315 modules)
+ GET /base-info/cost-objects 200 in 84ms
+ GET /base-info/employees 200 in 32ms
+ ⨯ Error: Cannot find module './4985.js'
+Require stack:
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\webpack-runtime.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\app\base-info\cost-objects\page.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\require.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\load-components.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\utils.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\options.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\index.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\parse-module.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\get-page-static-info.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-server.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\start-server.js
+    at <unknown> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\app\base-info\activities\page.js:2:19148)
+    at Object.<anonymous> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\app\base-info\activities\page.js:2:19235) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/base-info/activities'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 600ms (1388 modules)
+ ⨯ Error: Cannot find module './8548.js'
+Require stack:
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\webpack-runtime.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\require.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\load-components.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\utils.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\options.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\index.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\parse-module.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\get-page-static-info.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-server.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\start-server.js
+    at <unknown> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js:1:327)
+    at Object.<anonymous> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js:1:374) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /base-info/activities 500 in 748ms
+ ⨯ Error: Cannot find module './4985.js'
+Require stack:
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\webpack-runtime.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\require.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\load-components.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\utils.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\options.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\index.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\parse-module.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\get-page-static-info.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-server.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\start-server.js
+    at <unknown> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\app\base-info\activities\page.js:2:19148)
+    at Object.<anonymous> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\app\base-info\activities\page.js:2:19235) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/base-info/activities'
+}
+ ⨯ Error: Cannot find module './8548.js'
+Require stack:
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\webpack-runtime.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\require.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\load-components.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\utils.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\options.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\swc\index.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\parse-module.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\build\analysis\get-page-static-info.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\router-server.js
+- D:\mediconsol_csr\abc-rails\hospital-abc-app\node_modules\next\dist\server\lib\start-server.js
+    at <unknown> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js:1:327)
+    at Object.<anonymous> (D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js:1:374) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ GET /base-info/activities 500 in 72ms
+ ✓ Compiled /_not-found in 458ms (1393 modules)
+ GET /_next/static/chunks/fallback/webpack.js 404 in 2488ms
+ GET /_next/static/chunks/fallback/pages/_app.js 404 in 2485ms
+ GET /_next/static/chunks/fallback/main.js 404 in 2488ms
+ GET /_next/static/chunks/fallback/pages/_error.js 404 in 2485ms
+ GET /_next/static/chunks/fallback/react-refresh.js 404 in 2488ms
+ ✓ Compiled / in 329ms (781 modules)
+ GET / 200 in 911ms
+ GET /_next/static/css/app/layout.css?v=1754492723130 404 in 144ms
+ GET /_next/static/chunks/main-app.js?v=1754492723130 404 in 162ms
+ GET /_next/static/chunks/app/layout.js 404 in 162ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 161ms
+ GET /_next/static/css/app/layout.css?v=1754492725287 404 in 148ms
+ GET /_next/static/chunks/main-app.js?v=1754492725287 404 in 155ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 154ms
+ GET /_next/static/chunks/app/layout.js 404 in 156ms
+ GET / 200 in 260ms
+ ✓ Compiled /favicon.ico in 472ms (798 modules)
+ GET /favicon.ico 200 in 2106ms
+ GET /_next/static/css/app/layout.css?v=1754492739319 404 in 52ms
+ GET /_next/static/chunks/main-app.js?v=1754492739319 404 in 147ms
+ GET /_next/static/chunks/app/layout.js 404 in 147ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 146ms
+ GET / 200 in 434ms
+ GET /favicon.ico 200 in 10ms
+ GET /_next/static/css/app/layout.css?v=1754492767156 404 in 62ms
+ GET /_next/static/chunks/main-app.js?v=1754492767156 404 in 166ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 160ms
+ GET /_next/static/chunks/app/layout.js 404 in 166ms
+ GET / 200 in 278ms
+ GET /favicon.ico 200 in 11ms
+ GET /_next/static/css/app/layout.css?v=1754492769761 404 in 44ms
+ GET /_next/static/chunks/main-app.js?v=1754492769761 404 in 138ms
+ GET /_next/static/chunks/app/layout.js 404 in 139ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 138ms
+ GET / 200 in 244ms
+ GET /favicon.ico 200 in 12ms
+ GET /_next/static/css/app/layout.css?v=1754492770983 404 in 129ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 138ms
+ GET /_next/static/chunks/main-app.js?v=1754492770983 404 in 140ms
+ GET /_next/static/chunks/app/layout.js 404 in 140ms
+ GET / 200 in 237ms
+ GET /favicon.ico 200 in 11ms
+ GET /_next/static/css/app/layout.css?v=1754492826707 404 in 128ms
+ GET /_next/static/chunks/app/layout.js 404 in 139ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 139ms
+ GET /_next/static/chunks/main-app.js?v=1754492826707 404 in 141ms
+ GET / 200 in 244ms
+ GET /favicon.ico 200 in 11ms
+ ○ Compiling /base-info/departments ...
+ ✓ Compiled /base-info/departments in 1096ms (690 modules)
+ GET /base-info/departments 200 in 3489ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 560ms (1322 modules)
+ GET /_next/static/css/app/layout.css?v=1754492826707 404 in 939ms
+[Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\client-development\7.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\client-development\\7.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\client-development\7.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\client-development\\7.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\client-development\7.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\client-development\\7.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\client-development\7.pack.gz'
+[Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\8.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\8.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\8.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\8.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\8.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\8.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\13.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\13.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\13.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\13.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\13.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\13.pack.gz'
+}
+[Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\24.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\24.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\24.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\24.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\24.pack.gz'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\cache\\webpack\\server-development\\24.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\cache\webpack\server-development\8.pack.gz'
+ ✓ Compiled / in 284ms (694 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 635ms (1408 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\server\\pages\\_document.js'
+}
+ GET / 500 in 1996ms
+ ✓ Compiled /_not-found in 408ms (1413 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET /_next/static/chunks/fallback/webpack.js 500 in 3500ms
+ GET /_next/static/chunks/fallback/main.js 500 in 3484ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 3483ms
+ GET /_next/static/chunks/fallback/pages/_app.js 500 in 3481ms
+ GET /_next/static/chunks/fallback/pages/_error.js 500 in 3480ms
+ ✓ Compiled /favicon.ico in 438ms (798 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 2462ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET / 500 in 358ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET / 500 in 192ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 82ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET / 500 in 230ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 66ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET / 500 in 174ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 63ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json'
+}
+ GET / 500 in 270ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'D:\mediconsol_csr\abc-rails\hospital-abc-app\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\mediconsol_csr\\abc-rails\\hospital-abc-app\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 70ms
+[?25h

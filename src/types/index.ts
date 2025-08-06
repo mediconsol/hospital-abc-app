@@ -84,8 +84,23 @@ export interface RevenueCode extends BaseEntity {
   name: string; // '초진료' 
   category: string; // '진료비', '검사비', '처치비'
   unit_price: number;
+  unitPrice?: number; // 호환성을 위한 별칭
+  currency?: string;
+  billingType?: "per-service" | "per-hour" | "per-day" | "fixed";
+  effectiveDate?: string;
+  expiryDate?: string | null;
+  department?: string;
+  monthlyRevenue?: number;
+  usageCount?: number;
   is_active?: boolean; // 활성/비활성 상태
   description?: string;
+  // 추가 분류 필드들
+  majorCategory?: string; // 대분류명
+  minorCategory?: string; // 중분류명
+  feeType?: string; // 수가구분명
+  paymentType?: string; // 지불유형명
+  ediCode?: string; // EDI코드
+  relativeValue?: number; // 상대가치점수
 }
 
 export interface Driver extends BaseEntity {
