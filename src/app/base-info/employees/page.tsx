@@ -4,6 +4,7 @@ import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { EmployeeTable } from "@/components/tables/employee-table"
 import { mockDepartments, mockEmployees as initialEmployees } from "@/lib/mock-data"
+import { Employee } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,26 +13,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { User, Calendar, Hash, Mail, Phone, Building2, Briefcase, Edit2, Save, X } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-interface Employee {
-  id: string
-  hospital_id: string
-  period_id: string
-  employee_number: string
-  name: string
-  position: string
-  department_id: string
-  department_name: string
-  email?: string
-  phone?: string
-  hire_date: string
-  employment_type: 'full_time' | 'part_time' | 'contract'
-  salary: number
-  description?: string
-  is_active: boolean
-  created_at: string
-  updated_at: string
-}
 
 // mock-data.ts에서 가져온 데이터 사용
 
