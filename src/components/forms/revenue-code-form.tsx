@@ -14,39 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { DollarSign } from "lucide-react"
-
-interface RevenueCode {
-  id: string
-  code: string
-  name: string
-  description: string
-  category: string
-  unitPrice: number
-  currency: string
-  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  status: "active" | "inactive" | "pending"
-  effectiveDate: string
-  expiryDate: string | null
-  department: string
-  createdAt: string
-  updatedAt: string
-  monthlyRevenue?: number
-  usageCount?: number
-}
-
-interface CreateRevenueCodeForm {
-  code: string
-  name: string
-  description: string
-  category: string
-  unitPrice: number
-  currency: string
-  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  status: "active" | "inactive" | "pending"
-  effectiveDate: string
-  expiryDate: string
-  department: string
-}
+import { RevenueCode, CreateRevenueCodeForm } from "@/types"
 
 interface RevenueCodeFormProps {
   isOpen: boolean
@@ -69,10 +37,10 @@ export function RevenueCodeForm({
       name: revenueCode.name,
       description: revenueCode.description,
       category: revenueCode.category,
-      unitPrice: revenueCode.unitPrice,
+      unit_price: revenueCode.unit_price || revenueCode.unitPrice || 0,
       currency: revenueCode.currency,
       billingType: revenueCode.billingType,
-      status: revenueCode.status,
+      status: revenueCode.status || (revenueCode.is_active ? 'active' : 'inactive'),
       effectiveDate: revenueCode.effectiveDate ? revenueCode.effectiveDate.split('T')[0] : '',
       expiryDate: revenueCode.expiryDate ? revenueCode.expiryDate.split('T')[0] : '',
       department: revenueCode.department
@@ -81,7 +49,7 @@ export function RevenueCodeForm({
       name: '',
       description: '',
       category: '진료료',
-      unitPrice: 0,
+      unit_price: 0,
       currency: 'KRW',
       billingType: 'per-service',
       status: 'active',
@@ -91,7 +59,7 @@ export function RevenueCodeForm({
     }
   })
 
-  const watchedUnitPrice = watch("unitPrice")
+  const watchedUnitPrice = watch("unit_price")
 
   const handleFormSubmit = (data: CreateRevenueCodeForm) => {
     onSubmit(data)
@@ -195,13 +163,13 @@ export function RevenueCodeForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="unitPrice">단가 *</Label>
+              <Label htmlFor="unit_price">단가 *</Label>
               <div className="relative">
                 <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="unitPrice"
+                  id="unit_price"
                   type="number"
-                  {...register("unitPrice", { 
+                  {...register("unit_price", { 
                     required: "단가는 필수입니다",
                     valueAsNumber: true,
                     min: { value: 0, message: "단가는 0 이상이어야 합니다" }
@@ -210,8 +178,8 @@ export function RevenueCodeForm({
                   className="pl-10"
                 />
               </div>
-              {errors.unitPrice && (
-                <p className="text-sm text-red-500">{errors.unitPrice.message}</p>
+              {errors.unit_price && (
+                <p className="text-sm text-red-500">{errors.unit_price.message}</p>
               )}
               {watchedUnitPrice > 0 && (
                 <Badge variant="outline" className="text-primary">

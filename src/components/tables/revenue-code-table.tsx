@@ -14,40 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Plus, TrendingUp } from "lucide-react"
 import { RevenueCodeForm } from "@/components/forms/revenue-code-form"
-
-// 임시로 RevenueCode 타입을 정의 (is_active 필드 포함)
-interface RevenueCode {
-  id: string
-  code: string
-  name: string
-  description: string
-  category: string
-  unitPrice: number
-  currency: string
-  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  is_active?: boolean
-  effectiveDate: string
-  expiryDate: string | null
-  department: string
-  createdAt: string
-  updatedAt: string
-  monthlyRevenue?: number
-  usageCount?: number
-}
-
-interface CreateRevenueCodeForm {
-  code: string
-  name: string
-  description: string
-  category: string
-  unitPrice: number
-  currency: string
-  billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  is_active?: boolean
-  effectiveDate: string
-  expiryDate: string
-  department: string
-}
+import { RevenueCode, CreateRevenueCodeForm } from "@/types"
 
 interface RevenueCodeTableProps {
   revenueCodes: RevenueCode[]
@@ -158,7 +125,7 @@ export function RevenueCodeTable({
                     <TableCell>{code.category}</TableCell>
                     <TableCell>
                       <span className="font-medium text-primary">
-                        {formatCurrency(code.unitPrice)}
+                        {formatCurrency(code.unit_price)}
                       </span>
                     </TableCell>
                     <TableCell>{getBillingTypeText(code.billingType)}</TableCell>

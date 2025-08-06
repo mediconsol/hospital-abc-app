@@ -87,6 +87,7 @@ export interface RevenueCode extends BaseEntity {
   unitPrice?: number; // 호환성을 위한 별칭
   currency?: string;
   billingType?: "per-service" | "per-hour" | "per-day" | "fixed";
+  status?: "active" | "inactive" | "pending"; // 상태 필드 추가
   effectiveDate?: string;
   expiryDate?: string | null;
   department?: string;
@@ -310,6 +311,26 @@ export interface CreateEmployeeForm {
   employment_type: 'full_time' | 'part_time' | 'contract';
   salary: number;
   description?: string;
+}
+
+export interface CreateRevenueCodeForm {
+  code: string;
+  name: string;
+  description?: string;
+  category: string;
+  unit_price: number;
+  currency?: string;
+  billingType?: "per-service" | "per-hour" | "per-day" | "fixed";
+  status?: "active" | "inactive" | "pending";
+  effectiveDate?: string;
+  expiryDate?: string;
+  department?: string;
+  majorCategory?: string;
+  minorCategory?: string;
+  feeType?: string;
+  paymentType?: string;
+  ediCode?: string;
+  relativeValue?: number;
 }
 
 // 검색 및 필터 타입

@@ -296,11 +296,11 @@ export default function RevenueCodesPage() {
               name: data.name,
               description: data.description,
               category: data.category,
-              unit_price: data.unitPrice || 0,
-              unitPrice: data.unitPrice,
+              unit_price: data.unit_price || 0,
+              unitPrice: data.unit_price,
               currency: data.currency || 'KRW',
               billingType: data.billingType,
-              is_active: data.is_active !== false,
+              is_active: data.status !== 'inactive',
               effectiveDate: data.effectiveDate,
               expiryDate: data.expiryDate,
               department: data.department,
@@ -550,19 +550,19 @@ export default function RevenueCodesPage() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="unitPrice">단가</Label>
+                  <Label htmlFor="unit_price">단가</Label>
                   {isEditing ? (
                     <Input 
-                      id="unitPrice" 
+                      id="unit_price" 
                       type="number"
-                      value={editFormData?.unitPrice || 0} 
-                      onChange={(e) => handleFieldChange('unitPrice', parseInt(e.target.value) || 0)}
+                      value={editFormData?.unit_price || editFormData?.unitPrice || 0} 
+                      onChange={(e) => handleFieldChange('unit_price', parseInt(e.target.value) || 0)}
                       className="font-semibold"
                     />
                   ) : (
                     <Input 
-                      id="unitPrice" 
-                      value={formatCurrency(selectedRevenueCode.unitPrice)} 
+                      id="unit_price" 
+                      value={formatCurrency(selectedRevenueCode.unit_price || selectedRevenueCode.unitPrice || 0)} 
                       readOnly 
                       className="font-semibold text-primary"
                     />
