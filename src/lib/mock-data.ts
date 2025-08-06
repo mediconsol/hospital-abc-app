@@ -20,10 +20,10 @@ import {
 export const mockHospitals: Hospital[] = [
   {
     id: '1',
-    name: '서울대학교병원',
-    address: '서울특별시 종로구 대학로 101',
-    phone: '02-2072-2114',
-    type: '종합병원',
+    name: '가족사랑요양병원',
+    address: '서울특별시 강남구 테헤란로 123',
+    phone: '02-1234-5678',
+    type: '요양병원',
     created_at: '2025-01-01T00:00:00Z',
     updated_at: '2025-01-01T00:00:00Z',
   },
