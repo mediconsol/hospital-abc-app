@@ -376,11 +376,11 @@ export default function PermissionsPage() {
   const currentRole = getCurrentRolePermissions()
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col p-6 space-y-6">
       {/* 헤더 */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">권한 설정</h1>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-foreground">권한 설정</h1>
           <p className="text-muted-foreground">역할별 시스템 접근 권한을 관리합니다</p>
         </div>
         <div className="flex gap-2">

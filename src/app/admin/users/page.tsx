@@ -247,11 +247,11 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col p-6 space-y-6">
       {/* 헤더 */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">사용자 관리</h1>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-foreground">사용자 관리</h1>
           <p className="text-muted-foreground">시스템 사용자 계정을 관리합니다</p>
         </div>
         <Button onClick={handleAdd} className="gap-2">
