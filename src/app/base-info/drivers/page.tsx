@@ -668,7 +668,9 @@ export default function DriversPage() {
                     activities: data.activities ? data.activities.split(',').map(a => a.trim()).filter(a => a) : [],
                     costAllocation: {
                       method: 'equal'
-                    }
+                    },
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
                   }
                   setDrivers([...drivers, newDriver])
                 }}
@@ -679,7 +681,8 @@ export default function DriversPage() {
                           ...driver, 
                           ...data,
                           departments: data.departments ? data.departments.split(',').map(d => d.trim()).filter(d => d) : driver.departments,
-                          activities: data.activities ? data.activities.split(',').map(a => a.trim()).filter(a => a) : driver.activities
+                          activities: data.activities ? data.activities.split(',').map(a => a.trim()).filter(a => a) : driver.activities,
+                          updatedAt: new Date().toISOString()
                         }
                       : driver
                   ))
