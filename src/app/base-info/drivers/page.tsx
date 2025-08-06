@@ -664,8 +664,8 @@ export default function DriversPage() {
                     measurementMethod: data.measurementMethod || '',
                     frequency: data.frequency || 'monthly',
                     status: 'active',
-                    departments: data.departments || [],
-                    activities: data.activities || [],
+                    departments: data.departments ? data.departments.split(',').map(d => d.trim()).filter(d => d) : [],
+                    activities: data.activities ? data.activities.split(',').map(a => a.trim()).filter(a => a) : [],
                     costAllocation: {
                       method: 'equal'
                     }
@@ -677,7 +677,9 @@ export default function DriversPage() {
                     driver.id === id 
                       ? { 
                           ...driver, 
-                          ...data
+                          ...data,
+                          departments: data.departments ? data.departments.split(',').map(d => d.trim()).filter(d => d) : driver.departments,
+                          activities: data.activities ? data.activities.split(',').map(a => a.trim()).filter(a => a) : driver.activities
                         }
                       : driver
                   ))
