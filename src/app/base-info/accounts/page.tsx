@@ -8,24 +8,32 @@ import { Account } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Calculator, Calendar, DollarSign } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Calculator, Calendar, DollarSign, Edit2, Save, X } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>(mockAccounts)
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
   const [showTable, setShowTable] = useState(true)
+  const [showListView, setShowListView] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editFormData, setEditFormData] = useState<Account | null>(null)
 
   const handleAdd = () => {
     console.log("계정 추가")
     setSelectedAccount(null)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleEdit = (account: Account) => {
     setSelectedAccount(account)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleDelete = (account: Account) => {
@@ -41,6 +49,47 @@ export default function AccountsPage() {
   const handleItemSelect = (item: { id: string; name: string; data: Account }) => {
     setSelectedAccount(item.data)
     setShowTable(false)
+    setShowListView(false)
+  }
+
+  const handleShowList = () => {
+    setShowListView(true)
+    setSelectedAccount(null)
+    setShowTable(true)
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditStart = () => {
+    if (selectedAccount) {
+      setEditFormData({...selectedAccount})
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditSave = () => {
+    if (editFormData && selectedAccount) {
+      setAccounts(accounts.map(account => 
+        account.id === selectedAccount.id ? editFormData : account
+      ))
+      setSelectedAccount(editFormData)
+      setIsEditing(false)
+      setEditFormData(null)
+    }
+  }
+
+  const handleFieldChange = (field: keyof Account, value: any) => {
+    if (editFormData) {
+      setEditFormData({
+        ...editFormData,
+        [field]: value
+      })
+    }
   }
 
   // Group accounts by category for tree structure
@@ -83,6 +132,14 @@ export default function AccountsPage() {
       : 'bg-orange-500/10 text-orange-600 border-orange-500/20'
   }
 
+  const getActiveStatusColor = (isActive?: boolean) => {
+    return isActive ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-gray-500/10 text-gray-600 border-gray-500/20'
+  }
+
+  const getActiveStatusText = (isActive?: boolean) => {
+    return isActive ? '활성' : '비활성'
+  }
+
   return (
     <BaseInfoLayout
       title="계정 관리"
@@ -90,14 +147,16 @@ export default function AccountsPage() {
       treeData={treeData}
       selectedItem={selectedAccount ? { id: selectedAccount.id, name: selectedAccount.name, data: selectedAccount } : null}
       onItemSelect={handleItemSelect}
-      onAdd={handleAdd}
-      onEdit={(item) => handleEdit(item.data as Account)}
-      onDelete={(item) => handleDelete(item.data as Account)}
-      searchPlaceholder="계정 검색..."
-    >
-      {showTable ? (
+      onShowList={handleShowList}
+      showListView={showListView}
+      listViewComponent={
         <AccountTable
           accounts={accounts}
+          onRowClick={(account) => {
+            setSelectedAccount(account)
+            setShowListView(false)
+            setShowTable(false)
+          }}
           onAdd={(data) => {
             const newAccount: Account = {
               id: `${accounts.length + 1}`,
@@ -130,7 +189,10 @@ export default function AccountsPage() {
             }
           }}
         />
-      ) : selectedAccount ? (
+      }
+      searchPlaceholder="계정 검색..."
+    >
+      {selectedAccount && !showListView ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>
@@ -138,12 +200,50 @@ export default function AccountsPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">계정 정보</h3>
                 <div className="flex items-center gap-2">
-                  <Badge className={getCategoryBadgeColor(selectedAccount.category)}>
-                    {getCategoryLabel(selectedAccount.category)}
-                  </Badge>
-                  <Badge className={getDirectBadgeColor(selectedAccount.is_direct)}>
-                    {selectedAccount.is_direct ? '직접비' : '간접비'}
-                  </Badge>
+                  {isEditing ? (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={editFormData?.is_active || false}
+                          onCheckedChange={(checked) => handleFieldChange('is_active', checked)}
+                        />
+                        <Label className="text-sm">
+                          {editFormData?.is_active ? '활성' : '비활성'}
+                        </Label>
+                      </div>
+                      <Select value={editFormData?.category} onValueChange={(value) => handleFieldChange('category', value)}>
+                        <SelectTrigger className="w-24">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="salary">인건비</SelectItem>
+                          <SelectItem value="material">재료비</SelectItem>
+                          <SelectItem value="expense">경비</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={editFormData?.is_direct ? "true" : "false"} onValueChange={(value) => handleFieldChange('is_direct', value === "true")}>
+                        <SelectTrigger className="w-24">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">직접비</SelectItem>
+                          <SelectItem value="false">간접비</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  ) : (
+                    <>
+                      <Badge className={getActiveStatusColor(selectedAccount.is_active)}>
+                        {getActiveStatusText(selectedAccount.is_active)}
+                      </Badge>
+                      <Badge className={getCategoryBadgeColor(selectedAccount.category)}>
+                        {getCategoryLabel(selectedAccount.category)}
+                      </Badge>
+                      <Badge className={getDirectBadgeColor(selectedAccount.is_direct)}>
+                        {selectedAccount.is_direct ? '직접비' : '간접비'}
+                      </Badge>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -152,26 +252,68 @@ export default function AccountsPage() {
                   <Label htmlFor="code">계정코드</Label>
                   <div className="flex items-center gap-2">
                     <Calculator className="h-4 w-4 text-muted-foreground" />
-                    <Input id="code" value={selectedAccount.code} readOnly />
+                    <Input 
+                      id="code" 
+                      value={isEditing ? (editFormData?.code || '') : selectedAccount.code} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('code', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">계정명</Label>
                   <div className="flex items-center gap-2">
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <Input id="name" value={selectedAccount.name} readOnly />
+                    <Input 
+                      id="name" 
+                      value={isEditing ? (editFormData?.name || '') : selectedAccount.name} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('name', e.target.value)}
+                    />
                   </div>
+                </div>
+              </div>
+              
+              {/* 계정분류 정보 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="majorCategory">대분류명</Label>
+                  <Input 
+                    id="majorCategory" 
+                    value={isEditing ? (editFormData?.major_category || '') : (selectedAccount.major_category || '-')} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('major_category', e.target.value)}
+                    placeholder="예: 비용"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="minorCategory">중분류명</Label>
+                  <Input 
+                    id="minorCategory" 
+                    value={isEditing ? (editFormData?.minor_category || '') : (selectedAccount.minor_category || '-')} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('minor_category', e.target.value)}
+                    placeholder="예: 인건비"
+                  />
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="category">계정 분류</Label>
-                  <Input id="category" value={getCategoryLabel(selectedAccount.category)} readOnly />
+                  <Label htmlFor="category">소분류명</Label>
+                  <Input 
+                    id="category" 
+                    value={getCategoryLabel(isEditing ? (editFormData?.category || '') : selectedAccount.category)} 
+                    readOnly 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="type">비용 유형</Label>
-                  <Input id="type" value={selectedAccount.is_direct ? '직접비' : '간접비'} readOnly />
+                  <Input 
+                    id="type" 
+                    value={(isEditing ? editFormData?.is_direct : selectedAccount.is_direct) ? '직접비' : '간접비'} 
+                    readOnly 
+                  />
                 </div>
               </div>
               
@@ -179,9 +321,10 @@ export default function AccountsPage() {
                 <Label htmlFor="description">설명</Label>
                 <Textarea 
                   id="description" 
-                  value={selectedAccount.description || '설명이 없습니다.'} 
-                  readOnly 
-                  rows={3} 
+                  value={isEditing ? (editFormData?.description || '') : (selectedAccount.description || '설명이 없습니다.')} 
+                  readOnly={!isEditing}
+                  rows={3}
+                  onChange={(e) => isEditing && handleFieldChange('description', e.target.value)}
                 />
               </div>
               
@@ -211,15 +354,36 @@ export default function AccountsPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* 수정 버튼 */}
+          <div className="flex justify-end gap-2">
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleEditCancel}>
+                  <X className="h-4 w-4 mr-2" />
+                  취소
+                </Button>
+                <Button onClick={handleEditSave}>
+                  <Save className="h-4 w-4 mr-2" />
+                  저장
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEditStart}>
+                <Edit2 className="h-4 w-4 mr-2" />
+                계정 수정
+              </Button>
+            )}
+          </div>
         </div>
-      ) : (
+      ) : !showListView ? (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           <div className="text-center">
             <div className="text-lg font-medium mb-2">계정을 선택하세요</div>
             <div className="text-sm">왼쪽 목록에서 계정을 선택하면 상세 정보를 확인할 수 있습니다.</div>
           </div>
         </div>
-      )}
+      ) : null}
     </BaseInfoLayout>
   )
 }

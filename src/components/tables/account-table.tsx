@@ -20,13 +20,15 @@ interface AccountTableProps {
   onAdd: (data: CreateAccountForm) => void
   onEdit: (id: string, data: CreateAccountForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (account: Account) => void
 }
 
 export function AccountTable({ 
   accounts, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: AccountTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingAccount, setEditingAccount] = useState<Account | null>(null)
@@ -72,6 +74,16 @@ export function AccountTable({
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800'
   }
 
+  const getActiveStatusColor = (isActive?: boolean) => {
+    return (isActive ?? true) 
+      ? 'bg-green-100 text-green-800' 
+      : 'bg-gray-100 text-gray-800'
+  }
+
+  const getActiveStatusText = (isActive?: boolean) => {
+    return (isActive ?? true) ? '활성' : '비활성'
+  }
+
   return (
     <>
       <Card>
@@ -90,7 +102,7 @@ export function AccountTable({
                 <TableHead>계정명</TableHead>
                 <TableHead>분류</TableHead>
                 <TableHead>직접비</TableHead>
-                <TableHead>설명</TableHead>
+                <TableHead>상태</TableHead>
                 <TableHead className="text-right">작업</TableHead>
               </TableRow>
             </TableHeader>
@@ -103,7 +115,11 @@ export function AccountTable({
                 </TableRow>
               ) : (
                 accounts.map((account) => (
-                  <TableRow key={account.id}>
+                  <TableRow 
+                    key={account.id}
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(account)}
+                  >
                     <TableCell className="font-mono">{account.code}</TableCell>
                     <TableCell className="font-medium">{account.name}</TableCell>
                     <TableCell>
@@ -120,8 +136,10 @@ export function AccountTable({
                         {account.is_direct ? '직접비' : '간접비'}
                       </span>
                     </TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {account.description || '-'}
+                    <TableCell>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getActiveStatusColor(account.is_active)}`}>
+                        {getActiveStatusText(account.is_active)}
+                      </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">

@@ -47,6 +47,7 @@ export function DepartmentForm({
       parent_id: '',
       manager: '',
       description: '',
+      is_active: true,
     }
   })
 
@@ -86,6 +87,7 @@ export function DepartmentForm({
       setValue('parent_id', department.parent_id || '')
       setValue('manager', department.manager || '')
       setValue('description', department.description || '')
+      setValue('is_active', department.is_active ?? true)
     } else if (mode === 'create') {
       reset({
         code: '',
@@ -94,6 +96,7 @@ export function DepartmentForm({
         parent_id: '',
         manager: '',
         description: '',
+        is_active: true,
       })
     }
   }, [department, mode, setValue, reset])
@@ -176,10 +179,14 @@ export function DepartmentForm({
                 <SelectItem value="none">상위부서 없음 (최상위 부서)</SelectItem>
                 {getValidParentDepartments()
                   .sort((a, b) => {
-                    // 계층 구조에 따라 정렬
-                    const aHierarchy = getDepartmentHierarchy(a, departments)
-                    const bHierarchy = getDepartmentHierarchy(b, departments)
-                    return aHierarchy.localeCompare(bHierarchy)
+                    // 같은 레벨이면 부서코드 순으로, 다른 레벨이면 계층 구조 순으로
+                    const aLevel = a.parent_id ? (departments.find(d => d.id === a.parent_id) ? 1 : 0) : 0
+                    const bLevel = b.parent_id ? (departments.find(d => d.id === b.parent_id) ? 1 : 0) : 0
+                    
+                    if (aLevel !== bLevel) {
+                      return aLevel - bLevel
+                    }
+                    return a.code.localeCompare(b.code)
                   })
                   .map((dept) => (
                     <SelectItem key={dept.id} value={dept.id}>
@@ -219,6 +226,18 @@ export function DepartmentForm({
               placeholder="부서 설명을 입력하세요"
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              id="is_active"
+              type="checkbox"
+              {...register("is_active")}
+              className="h-4 w-4 rounded border border-input bg-background text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            />
+            <Label htmlFor="is_active" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              활성화 상태
+            </Label>
           </div>
           
           <DialogFooter>

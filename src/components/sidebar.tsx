@@ -54,7 +54,7 @@ const navigation: NavItem[] = [
       { title: "활동 관리", href: "/base-info/activities", icon: Database },
       { title: "계정 관리", href: "/base-info/accounts", icon: Database },
       { title: "프로세스 관리", href: "/base-info/processes", icon: Database },
-      { title: "수익코드 관리", href: "/base-info/revenue-codes", icon: Database },
+      { title: "수가코드 관리", href: "/base-info/revenue-codes", icon: Database },
       { title: "드라이버 설정", href: "/base-info/drivers", icon: Database },
       { title: "원가대상 관리", href: "/base-info/cost-objects", icon: Target },
       { title: "배분단계 관리", href: "/base-info/allocation-rules", icon: GitBranch },
@@ -88,7 +88,7 @@ const navigation: NavItem[] = [
     children: [
       { title: "부서별 원가", href: "/reports/departments", icon: BarChart3 },
       { title: "활동별 원가", href: "/reports/activities", icon: BarChart3 },
-      { title: "수익코드별 단가", href: "/reports/revenue-units", icon: BarChart3 },
+      { title: "수가코드별 단가", href: "/reports/revenue-units", icon: BarChart3 },
       { title: "원가대상별 원가", href: "/reports/cost-objects", icon: Target },
       { title: "KPI 대시보드", href: "/reports/kpi", icon: BarChart3 },
     ],

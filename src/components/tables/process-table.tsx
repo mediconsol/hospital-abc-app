@@ -56,13 +56,15 @@ interface ProcessTableProps {
   onAdd: (data: CreateProcessForm) => void
   onEdit: (id: string, data: CreateProcessForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (process: Process) => void
 }
 
 export function ProcessTable({ 
   processes, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: ProcessTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingProcess, setEditingProcess] = useState<Process | null>(null)
@@ -148,7 +150,11 @@ export function ProcessTable({
                 </TableRow>
               ) : (
                 processes.map((process) => (
-                  <TableRow key={process.id}>
+                  <TableRow 
+                    key={process.id}
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(process)}
+                  >
                     <TableCell className="font-mono">{process.code}</TableCell>
                     <TableCell className="font-medium">{process.name}</TableCell>
                     <TableCell>{process.category}</TableCell>

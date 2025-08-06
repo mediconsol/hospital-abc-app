@@ -20,13 +20,15 @@ interface DepartmentTableProps {
   onAdd: (data: CreateDepartmentForm) => void
   onEdit: (id: string, data: CreateDepartmentForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (department: Department) => void
 }
 
 export function DepartmentTable({ 
   departments, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: DepartmentTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null)
@@ -65,8 +67,8 @@ export function DepartmentTable({
       return bHierarchy.level - aHierarchy.level
     }
     
-    // 같은 레벨이면 이름 순으로
-    return a.name.localeCompare(b.name)
+    // 같은 레벨이면 부서코드 순으로
+    return a.code.localeCompare(b.code)
   })
 
   const handleAdd = () => {
@@ -117,15 +119,14 @@ export function DepartmentTable({
                 <TableHead>부서명</TableHead>
                 <TableHead>상위부서</TableHead>
                 <TableHead>유형</TableHead>
-                <TableHead>부서장</TableHead>
-                <TableHead>설명</TableHead>
+                <TableHead>상태</TableHead>
                 <TableHead className="text-right">작업</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {departments.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     등록된 부서가 없습니다
                   </TableCell>
                 </TableRow>
@@ -135,7 +136,11 @@ export function DepartmentTable({
                   const indent = '　'.repeat(Math.max(0, 2 - hierarchy.level)) // 계층에 따른 들여쓰기
                   
                   return (
-                    <TableRow key={department.id}>
+                    <TableRow 
+                      key={department.id}
+                      className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                      onClick={() => onRowClick?.(department)}
+                    >
                       <TableCell className="font-mono">{department.code}</TableCell>
                       <TableCell className="font-medium">
                         <div className="flex items-center">
@@ -153,9 +158,14 @@ export function DepartmentTable({
                           {getTypeLabel(department.type)}
                         </span>
                       </TableCell>
-                      <TableCell>{department.manager || '-'}</TableCell>
-                      <TableCell className="max-w-xs truncate">
-                        {department.description || '-'}
+                      <TableCell>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          (department.is_active ?? true) 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-gray-100 text-gray-500'
+                        }`}>
+                          {(department.is_active ?? true) ? '활성' : '비활성'}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">

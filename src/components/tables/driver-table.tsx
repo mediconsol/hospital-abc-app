@@ -60,13 +60,15 @@ interface DriverTableProps {
   onAdd: (data: CreateDriverForm) => void
   onEdit: (id: string, data: CreateDriverForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (driver: Driver) => void
 }
 
 export function DriverTable({ 
   drivers, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: DriverTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null)
@@ -176,7 +178,11 @@ export function DriverTable({
                 </TableRow>
               ) : (
                 drivers.map((driver) => (
-                  <TableRow key={driver.id}>
+                  <TableRow 
+                    key={driver.id}
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(driver)}
+                  >
                     <TableCell className="font-mono">{driver.code}</TableCell>
                     <TableCell className="font-medium">{driver.name}</TableCell>
                     <TableCell>{getTypeText(driver.type)}</TableCell>

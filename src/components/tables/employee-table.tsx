@@ -15,19 +15,22 @@ import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Plus } from "lucide-react"
 import { EmployeeForm } from "@/components/forms/employee-form"
 import { Employee, CreateEmployeeForm } from "@/types"
+import { mockDepartments } from "@/lib/mock-data"
 
 interface EmployeeTableProps {
   employees: Employee[]
   onAdd: (data: CreateEmployeeForm) => void
   onEdit: (id: string, data: CreateEmployeeForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (employee: Employee) => void
 }
 
 export function EmployeeTable({ 
   employees, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: EmployeeTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
@@ -75,6 +78,11 @@ export function EmployeeTable({
     return new Intl.NumberFormat('ko-KR').format(amount) + '원'
   }
 
+  const getDepartmentName = (departmentId: string) => {
+    const department = mockDepartments.find(d => d.id === departmentId)
+    return department ? department.name : '알 수 없음'
+  }
+
   return (
     <>
       <Card>
@@ -108,11 +116,15 @@ export function EmployeeTable({
                 </TableRow>
               ) : (
                 employees.map((employee) => (
-                  <TableRow key={employee.id}>
+                  <TableRow 
+                    key={employee.id}
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(employee)}
+                  >
                     <TableCell className="font-mono">{employee.employee_number}</TableCell>
                     <TableCell className="font-medium">{employee.name}</TableCell>
                     <TableCell>{employee.position}</TableCell>
-                    <TableCell>{employee.department_name || '미분류'}</TableCell>
+                    <TableCell>{getDepartmentName(employee.department_id) || '미분류'}</TableCell>
                     <TableCell>
                       <Badge className={getEmploymentTypeBadgeColor(employee.employment_type)}>
                         {getEmploymentTypeLabel(employee.employment_type)}

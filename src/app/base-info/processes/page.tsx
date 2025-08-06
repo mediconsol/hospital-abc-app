@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Clock, User, Target, Play, Calendar } from "lucide-react"
+import { ArrowRight, Clock, User, Target, Play, Calendar, Edit2, Save, X } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface ProcessStep {
   id: string
@@ -112,16 +113,21 @@ export default function ProcessesPage() {
   const [processes, setProcesses] = useState<Process[]>(mockProcesses)
   const [selectedProcess, setSelectedProcess] = useState<Process | null>(null)
   const [showTable, setShowTable] = useState(true)
+  const [showListView, setShowListView] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editFormData, setEditFormData] = useState<Process | null>(null)
 
   const handleAdd = () => {
     console.log("프로세스 추가")
     setSelectedProcess(null)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleEdit = (process: Process) => {
     setSelectedProcess(process)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleDelete = (process: Process) => {
@@ -137,6 +143,62 @@ export default function ProcessesPage() {
   const handleItemSelect = (item: any) => {
     setSelectedProcess(item.data)
     setShowTable(false)
+    setShowListView(false)
+  }
+
+  const handleShowList = () => {
+    setShowListView(true)
+    setSelectedProcess(null)
+    setShowTable(true)
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditStart = () => {
+    if (selectedProcess) {
+      setEditFormData({...selectedProcess})
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditSave = () => {
+    if (editFormData && selectedProcess) {
+      setProcesses(processes.map(process => 
+        process.id === selectedProcess.id ? editFormData : process
+      ))
+      setSelectedProcess(editFormData)
+      setIsEditing(false)
+      setEditFormData(null)
+    }
+  }
+
+  const handleFieldChange = (field: keyof Process, value: any) => {
+    if (editFormData) {
+      setEditFormData({
+        ...editFormData,
+        [field]: value
+      })
+    }
+  }
+
+  const handleStepChange = (stepIndex: number, field: keyof ProcessStep, value: any) => {
+    if (editFormData) {
+      const updatedSteps = [...editFormData.steps]
+      updatedSteps[stepIndex] = {
+        ...updatedSteps[stepIndex],
+        [field]: value
+      }
+      setEditFormData({
+        ...editFormData,
+        steps: updatedSteps,
+        totalEstimatedTime: updatedSteps.reduce((total, step) => total + step.estimatedTime, 0)
+      })
+    }
   }
 
   // Group by category for tree structure
@@ -188,14 +250,16 @@ export default function ProcessesPage() {
       treeData={treeData}
       selectedItem={selectedProcess ? { id: selectedProcess.id, name: selectedProcess.name, data: selectedProcess } : null}
       onItemSelect={handleItemSelect}
-      onAdd={handleAdd}
-      onEdit={(item) => handleEdit(item.data as Process)}
-      onDelete={(item) => handleDelete(item.data as Process)}
-      searchPlaceholder="프로세스 검색..."
-    >
-      {showTable ? (
+      onShowList={handleShowList}
+      showListView={showListView}
+      listViewComponent={
         <ProcessTable
           processes={processes}
+          onRowClick={(process) => {
+            setSelectedProcess(process)
+            setShowListView(false)
+            setShowTable(false)
+          }}
           onAdd={(data) => {
             const processSteps = data.steps.map((step, index) => ({
               id: `step-${index + 1}`,
@@ -254,7 +318,10 @@ export default function ProcessesPage() {
             }
           }}
         />
-      ) : selectedProcess ? (
+      }
+      searchPlaceholder="프로세스 검색..."
+    >
+      {selectedProcess && !showListView ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>
@@ -262,12 +329,35 @@ export default function ProcessesPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">프로세스 정보</h3>
                 <div className="flex items-center gap-2">
-                  <Badge className={getStatusColor(selectedProcess.status)}>
-                    {getStatusText(selectedProcess.status)}
-                  </Badge>
-                  <Badge variant="outline">
-                    {selectedProcess.category}
-                  </Badge>
+                  {isEditing ? (
+                    <>
+                      <Select value={editFormData?.status} onValueChange={(value) => handleFieldChange('status', value)}>
+                        <SelectTrigger className="w-20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="active">활성</SelectItem>
+                          <SelectItem value="inactive">비활성</SelectItem>
+                          <SelectItem value="draft">초안</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        value={editFormData?.category || ''}
+                        onChange={(e) => handleFieldChange('category', e.target.value)}
+                        className="w-24 text-xs"
+                        placeholder="분류"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Badge className={getStatusColor(selectedProcess.status)}>
+                        {getStatusText(selectedProcess.status)}
+                      </Badge>
+                      <Badge variant="outline">
+                        {selectedProcess.category}
+                      </Badge>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -276,40 +366,70 @@ export default function ProcessesPage() {
                   <Label htmlFor="code">프로세스 코드</Label>
                   <div className="flex items-center gap-2">
                     <Target className="h-4 w-4 text-muted-foreground" />
-                    <Input id="code" value={selectedProcess.code} readOnly />
+                    <Input 
+                      id="code" 
+                      value={isEditing ? (editFormData?.code || '') : selectedProcess.code} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('code', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">프로세스명</Label>
                   <div className="flex items-center gap-2">
                     <Play className="h-4 w-4 text-muted-foreground" />
-                    <Input id="name" value={selectedProcess.name} readOnly />
+                    <Input 
+                      id="name" 
+                      value={isEditing ? (editFormData?.name || '') : selectedProcess.name} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('name', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="description">설명</Label>
-                <Textarea id="description" value={selectedProcess.description} readOnly rows={2} />
+                <Textarea 
+                  id="description" 
+                  value={isEditing ? (editFormData?.description || '') : selectedProcess.description} 
+                  readOnly={!isEditing} 
+                  rows={2}
+                  onChange={(e) => isEditing && handleFieldChange('description', e.target.value)}
+                />
               </div>
               
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="category">분류</Label>
-                  <Input id="category" value={selectedProcess.category} readOnly />
+                  <Input 
+                    id="category" 
+                    value={isEditing ? (editFormData?.category || '') : selectedProcess.category} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('category', e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="department">담당 부서</Label>
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <Input id="department" value={selectedProcess.department} readOnly />
+                    <Input 
+                      id="department" 
+                      value={isEditing ? (editFormData?.department || '') : selectedProcess.department} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('department', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="estimatedTime">예상 소요시간</Label>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Input id="estimatedTime" value={formatTime(selectedProcess.totalEstimatedTime)} readOnly />
+                    <Input 
+                      id="estimatedTime" 
+                      value={formatTime(isEditing ? (editFormData?.totalEstimatedTime || 0) : selectedProcess.totalEstimatedTime)} 
+                      readOnly 
+                    />
                   </div>
                 </div>
               </div>
@@ -350,7 +470,7 @@ export default function ProcessesPage() {
               </div>
               
               <div className="space-y-4">
-                {selectedProcess.steps.map((step, index) => (
+                {(isEditing ? editFormData?.steps : selectedProcess.steps)?.map((step, index) => (
                   <div 
                     key={step.id} 
                     className="flex items-start gap-4 p-4 border border-border rounded-lg bg-muted/30"
@@ -359,21 +479,48 @@ export default function ProcessesPage() {
                       {index + 1}
                     </div>
                     <div className="flex-1 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">{step.name}</h4>
+                      <div className="flex items-center justify-between gap-4">
+                        {isEditing ? (
+                          <Input
+                            value={step.name}
+                            onChange={(e) => handleStepChange(index, 'name', e.target.value)}
+                            className="font-medium"
+                          />
+                        ) : (
+                          <h4 className="font-medium">{step.name}</h4>
+                        )}
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
-                          {formatTime(step.estimatedTime)}
+                          {isEditing ? (
+                            <Input
+                              type="number"
+                              value={step.estimatedTime}
+                              onChange={(e) => handleStepChange(index, 'estimatedTime', parseInt(e.target.value) || 0)}
+                              className="w-16 h-6 text-xs"
+                              min="0"
+                            />
+                          ) : (
+                            formatTime(step.estimatedTime)
+                          )}
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
+                      {isEditing ? (
+                        <Textarea
+                          value={step.description}
+                          onChange={(e) => handleStepChange(index, 'description', e.target.value)}
+                          className="text-sm"
+                          rows={2}
+                        />
+                      ) : (
+                        <p className="text-sm text-muted-foreground">{step.description}</p>
+                      )}
                       {step.dependencies.length > 0 && (
                         <div className="text-xs text-blue-600">
                           의존성: {step.dependencies.join(', ')}
                         </div>
                       )}
                     </div>
-                    {index < selectedProcess.steps.length - 1 && (
+                    {index < (isEditing ? editFormData?.steps.length : selectedProcess.steps.length) - 1 && (
                       <ArrowRight className="h-4 w-4 text-muted-foreground mt-2" />
                     )}
                   </div>
@@ -381,15 +528,36 @@ export default function ProcessesPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* 수정 버튼 */}
+          <div className="flex justify-end gap-2">
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleEditCancel}>
+                  <X className="h-4 w-4 mr-2" />
+                  취소
+                </Button>
+                <Button onClick={handleEditSave}>
+                  <Save className="h-4 w-4 mr-2" />
+                  저장
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEditStart}>
+                <Edit2 className="h-4 w-4 mr-2" />
+                프로세스 수정
+              </Button>
+            )}
+          </div>
         </div>
-      ) : (
+      ) : !showListView ? (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           <div className="text-center">
             <div className="text-lg font-medium mb-2">프로세스를 선택하세요</div>
             <div className="text-sm">왼쪽 목록에서 프로세스를 선택하면 상세 정보를 확인할 수 있습니다.</div>
           </div>
         </div>
-      )}
+      ) : null}
     </BaseInfoLayout>
   )
 }

@@ -21,6 +21,7 @@ interface ActivityTableProps {
   onAdd: (data: CreateActivityForm) => void
   onEdit: (id: string, data: CreateActivityForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (activity: Activity) => void
 }
 
 export function ActivityTable({ 
@@ -28,7 +29,8 @@ export function ActivityTable({
   departments,
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: ActivityTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null)
@@ -71,6 +73,16 @@ export function ActivityTable({
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800'
   }
 
+  const getActiveStatusColor = (isActive?: boolean) => {
+    return (isActive ?? true) 
+      ? 'bg-green-100 text-green-800' 
+      : 'bg-gray-100 text-gray-800'
+  }
+
+  const getActiveStatusText = (isActive?: boolean) => {
+    return (isActive ?? true) ? '활성' : '비활성'
+  }
+
   return (
     <>
       <Card>
@@ -89,7 +101,7 @@ export function ActivityTable({
                 <TableHead>활동명</TableHead>
                 <TableHead>분류</TableHead>
                 <TableHead>주관부서</TableHead>
-                <TableHead>설명</TableHead>
+                <TableHead>상태</TableHead>
                 <TableHead className="text-right">작업</TableHead>
               </TableRow>
             </TableHeader>
@@ -102,7 +114,11 @@ export function ActivityTable({
                 </TableRow>
               ) : (
                 activities.map((activity) => (
-                  <TableRow key={activity.id}>
+                  <TableRow 
+                    key={activity.id}
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(activity)}
+                  >
                     <TableCell className="font-mono">{activity.code}</TableCell>
                     <TableCell className="font-medium">{activity.name}</TableCell>
                     <TableCell>
@@ -111,8 +127,10 @@ export function ActivityTable({
                       </span>
                     </TableCell>
                     <TableCell>{getDepartmentName(activity.department_id)}</TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {activity.description || '-'}
+                    <TableCell>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getActiveStatusColor(activity.is_active)}`}>
+                        {getActiveStatusText(activity.is_active)}
+                      </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">

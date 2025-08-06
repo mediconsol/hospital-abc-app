@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Edit, Trash2, Plus, DollarSign, TrendingUp } from "lucide-react"
+import { Edit, Trash2, Plus, TrendingUp } from "lucide-react"
 import { RevenueCodeForm } from "@/components/forms/revenue-code-form"
 
+// 임시로 RevenueCode 타입을 정의 (is_active 필드 포함)
 interface RevenueCode {
   id: string
   code: string
@@ -24,7 +25,7 @@ interface RevenueCode {
   unitPrice: number
   currency: string
   billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  status: "active" | "inactive" | "pending"
+  is_active?: boolean
   effectiveDate: string
   expiryDate: string | null
   department: string
@@ -42,7 +43,7 @@ interface CreateRevenueCodeForm {
   unitPrice: number
   currency: string
   billingType: "per-service" | "per-hour" | "per-day" | "fixed"
-  status: "active" | "inactive" | "pending"
+  is_active?: boolean
   effectiveDate: string
   expiryDate: string
   department: string
@@ -53,13 +54,15 @@ interface RevenueCodeTableProps {
   onAdd: (data: CreateRevenueCodeForm) => void
   onEdit: (id: string, data: CreateRevenueCodeForm) => void
   onDelete: (id: string) => void
+  onRowClick?: (revenueCode: RevenueCode) => void
 }
 
 export function RevenueCodeTable({ 
   revenueCodes, 
   onAdd, 
   onEdit, 
-  onDelete 
+  onDelete,
+  onRowClick
 }: RevenueCodeTableProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingRevenueCode, setEditingRevenueCode] = useState<RevenueCode | null>(null)
@@ -85,22 +88,14 @@ export function RevenueCodeTable({
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800'
-      case 'inactive': return 'bg-gray-100 text-gray-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
+  const getActiveStatusColor = (isActive?: boolean) => {
+    return (isActive ?? true) 
+      ? 'bg-green-100 text-green-800' 
+      : 'bg-gray-100 text-gray-800'
   }
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active': return '활성'
-      case 'inactive': return '비활성'
-      case 'pending': return '대기'
-      default: return '알 수 없음'
-    }
+  const getActiveStatusText = (isActive?: boolean) => {
+    return (isActive ?? true) ? '활성' : '비활성'
   }
 
   const getBillingTypeText = (type: string) => {
@@ -124,10 +119,10 @@ export function RevenueCodeTable({
     <>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>수익코드 관리</CardTitle>
+          <CardTitle>수가코드 관리</CardTitle>
           <Button onClick={handleAdd} className="gap-2">
             <Plus className="h-4 w-4" />
-            수익코드 추가
+            수가코드 추가
           </Button>
         </CardHeader>
         <CardContent>
@@ -140,7 +135,6 @@ export function RevenueCodeTable({
                 <TableHead>단가</TableHead>
                 <TableHead>과금방식</TableHead>
                 <TableHead>담당부서</TableHead>
-                <TableHead>월간수익</TableHead>
                 <TableHead>상태</TableHead>
                 <TableHead className="text-right">작업</TableHead>
               </TableRow>
@@ -148,41 +142,30 @@ export function RevenueCodeTable({
             <TableBody>
               {revenueCodes.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
-                    등록된 수익코드가 없습니다
+                  <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    등록된 수가코드가 없습니다
                   </TableCell>
                 </TableRow>
               ) : (
                 revenueCodes.map((code) => (
-                  <TableRow key={code.id}>
+                  <TableRow 
+                    key={code.id} 
+                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
+                    onClick={() => onRowClick?.(code)}
+                  >
                     <TableCell className="font-mono">{code.code}</TableCell>
                     <TableCell className="font-medium">{code.name}</TableCell>
                     <TableCell>{code.category}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1">
-                        <DollarSign className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium text-primary">
-                          {formatCurrency(code.unitPrice)}
-                        </span>
-                      </div>
+                      <span className="font-medium text-primary">
+                        {formatCurrency(code.unitPrice)}
+                      </span>
                     </TableCell>
                     <TableCell>{getBillingTypeText(code.billingType)}</TableCell>
                     <TableCell>{code.department}</TableCell>
                     <TableCell>
-                      {code.monthlyRevenue ? (
-                        <div className="flex items-center gap-1">
-                          <TrendingUp className="h-4 w-4 text-green-500" />
-                          <span className="font-medium text-green-600">
-                            {formatCurrency(code.monthlyRevenue)}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(code.status)}>
-                        {getStatusText(code.status)}
+                      <Badge className={getActiveStatusColor(code.is_active)}>
+                        {getActiveStatusText(code.is_active)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">

@@ -9,9 +9,11 @@ import { Department, CreateDepartmentForm, Employee } from "@/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Building2, User, Calendar, Hash, Users, Mail, Phone, Briefcase } from "lucide-react"
+import { Building2, User, Calendar, Hash, Users, Mail, Phone, Briefcase, Edit2, Save, X } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface TreeNode {
   id: string
@@ -27,16 +29,61 @@ export default function DepartmentsPage() {
   const [departments, setDepartments] = useState<Department[]>(mockDepartments)
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null)
   const [showTable, setShowTable] = useState(true)
+  const [showListView, setShowListView] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editFormData, setEditFormData] = useState<Department | null>(null)
 
   const handleAdd = () => {
     console.log("부서 추가")
     setSelectedDepartment(null)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleEdit = (department: Department) => {
     setSelectedDepartment(department)
     setShowTable(false)
+    setShowListView(false)
+  }
+
+  const handleShowList = () => {
+    setShowListView(true)
+    setSelectedDepartment(null)
+    setShowTable(true)
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditStart = () => {
+    if (selectedDepartment) {
+      setEditFormData({...selectedDepartment})
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditSave = () => {
+    if (editFormData && selectedDepartment) {
+      setDepartments(departments.map(department => 
+        department.id === selectedDepartment.id ? editFormData : department
+      ))
+      setSelectedDepartment(editFormData)
+      setIsEditing(false)
+      setEditFormData(null)
+    }
+  }
+
+  const handleFieldChange = (field: keyof Department, value: any) => {
+    if (editFormData) {
+      setEditFormData({
+        ...editFormData,
+        [field]: value
+      })
+    }
   }
 
   const handleDelete = (department: Department) => {
@@ -59,6 +106,7 @@ export default function DepartmentsPage() {
   const handleItemSelect = (item: any) => {
     setSelectedDepartment(item.data)
     setShowTable(false)
+    setShowListView(false)
   }
 
   // 계층형 트리 구조 생성
@@ -98,9 +146,9 @@ export default function DepartmentsPage() {
       }
     })
 
-    // 이름순으로 정렬
+    // 부서코드순으로 정렬
     const sortNodes = (nodes: TreeNode[]) => {
-      nodes.sort((a, b) => a.name.localeCompare(b.name))
+      nodes.sort((a, b) => a.code.localeCompare(b.code))
       nodes.forEach(node => sortNodes(node.children))
     }
     sortNodes(rootNodes)
@@ -189,22 +237,16 @@ export default function DepartmentsPage() {
       treeData={treeData}
       selectedItem={selectedDepartment ? { id: selectedDepartment.id, name: selectedDepartment.name, data: selectedDepartment } : null}
       onItemSelect={handleItemSelect}
-      onAdd={handleAdd}
-      onEdit={(item) => handleEdit(item.data as Department)}
-      onDelete={(item) => handleDelete(item.data as Department)}
-      searchPlaceholder="부서 검색..."
-      customTreeRenderer={(treeProps) => (
-        <HierarchicalTree
-          data={buildHierarchicalTree(departments)}
-          selectedId={selectedDepartment?.id}
-          onSelect={(node) => handleItemSelect({ data: node.data })}
-          searchTerm={treeProps.searchTerm}
-        />
-      )}
-    >
-      {showTable ? (
+      onShowList={handleShowList}
+      showListView={showListView}
+      listViewComponent={
         <DepartmentTable
           departments={departments}
+          onRowClick={(department) => {
+            setSelectedDepartment(department)
+            setShowListView(false)
+            setShowTable(false)
+          }}
           onAdd={(data) => {
             const newDepartment: Department = {
               id: `${departments.length + 1}`,
@@ -216,6 +258,7 @@ export default function DepartmentsPage() {
               parent_id: data.parent_id,
               manager: data.manager,
               description: data.description,
+              is_active: data.is_active ?? true,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
             }
@@ -239,7 +282,18 @@ export default function DepartmentsPage() {
             }
           }}
         />
-      ) : selectedDepartment ? (
+      }
+      searchPlaceholder="부서 검색..."
+      customTreeRenderer={(treeProps) => (
+        <HierarchicalTree
+          data={buildHierarchicalTree(departments)}
+          selectedId={selectedDepartment?.id}
+          onSelect={(node) => handleItemSelect({ data: node.data })}
+          searchTerm={treeProps.searchTerm}
+        />
+      )}
+    >
+      {selectedDepartment && !showListView ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>
@@ -247,12 +301,26 @@ export default function DepartmentsPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">부서 정보</h3>
                 <div className="flex items-center gap-2">
-                  <Badge className={getTypeBadgeColor(selectedDepartment.type)}>
-                    {getTypeLabel(selectedDepartment.type)}
-                  </Badge>
-                  <Badge variant="outline">
-                    {getLevelLabel(selectedDepartment)}
-                  </Badge>
+                  {isEditing ? (
+                    <Select value={editFormData?.type} onValueChange={(value) => handleFieldChange('type', value)}>
+                      <SelectTrigger className="w-24">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="direct">직접부서</SelectItem>
+                        <SelectItem value="indirect">간접부서</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <>
+                      <Badge className={getTypeBadgeColor(selectedDepartment.type)}>
+                        {getTypeLabel(selectedDepartment.type)}
+                      </Badge>
+                      <Badge variant="outline">
+                        {getLevelLabel(selectedDepartment)}
+                      </Badge>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -261,14 +329,24 @@ export default function DepartmentsPage() {
                   <Label htmlFor="code">부서코드</Label>
                   <div className="flex items-center gap-2">
                     <Hash className="h-4 w-4 text-muted-foreground" />
-                    <Input id="code" value={selectedDepartment.code} readOnly />
+                    <Input 
+                      id="code" 
+                      value={isEditing ? (editFormData?.code || '') : selectedDepartment.code} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('code', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">부서명</Label>
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-muted-foreground" />
-                    <Input id="name" value={selectedDepartment.name} readOnly />
+                    <Input 
+                      id="name" 
+                      value={isEditing ? (editFormData?.name || '') : selectedDepartment.name} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('name', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -278,27 +356,89 @@ export default function DepartmentsPage() {
                   <Label htmlFor="manager">부서장</Label>
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <Input id="manager" value={selectedDepartment.manager || '없음'} readOnly />
+                    <Input 
+                      id="manager" 
+                      value={isEditing ? (editFormData?.manager || '') : (selectedDepartment.manager || '없음')} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('manager', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="type">부서 유형</Label>
-                  <Input id="type" value={getTypeLabel(selectedDepartment.type)} readOnly />
+                  <Input 
+                    id="type" 
+                    value={getTypeLabel(isEditing ? (editFormData?.type || '') : selectedDepartment.type)} 
+                    readOnly 
+                  />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="status">활성화 상태</Label>
+                  <div className="flex items-center gap-2">
+                    {isEditing ? (
+                      <Select value={editFormData?.is_active ? "true" : "false"} onValueChange={(value) => handleFieldChange('is_active', value === "true")}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">활성</SelectItem>
+                          <SelectItem value="false">비활성</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <>
+                        <div className={`w-3 h-3 rounded-full ${
+                          (selectedDepartment.is_active ?? true) ? 'bg-green-500' : 'bg-gray-400'
+                        }`}></div>
+                        <Input 
+                          id="status" 
+                          value={(selectedDepartment.is_active ?? true) ? '활성' : '비활성'} 
+                          readOnly 
+                          className={`${
+                            (selectedDepartment.is_active ?? true) ? 'text-green-600' : 'text-gray-500'
+                          }`}
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div></div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="parent">상위 부서</Label>
-                <Input id="parent" value={getParentName(selectedDepartment.parent_id)} readOnly />
+                {isEditing ? (
+                  <Select value={editFormData?.parent_id || "none"} onValueChange={(value) => handleFieldChange('parent_id', value === "none" ? null : value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="상위 부서 선택" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">없음 (최상위)</SelectItem>
+                      {departments
+                        .filter(dept => dept.id !== selectedDepartment.id)
+                        .map((dept) => (
+                          <SelectItem key={dept.id} value={dept.id}>
+                            {dept.code} - {dept.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input id="parent" value={getParentName(selectedDepartment.parent_id)} readOnly />
+                )}
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="description">설명</Label>
                 <Textarea 
                   id="description" 
-                  value={selectedDepartment.description || '설명이 없습니다.'} 
-                  readOnly 
-                  rows={3} 
+                  value={isEditing ? (editFormData?.description || '') : (selectedDepartment.description || '설명이 없습니다.')} 
+                  readOnly={!isEditing}
+                  rows={3}
+                  onChange={(e) => isEditing && handleFieldChange('description', e.target.value)}
                 />
               </div>
               
@@ -328,6 +468,27 @@ export default function DepartmentsPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* 수정 버튼 */}
+          <div className="flex justify-end gap-2">
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleEditCancel}>
+                  <X className="h-4 w-4 mr-2" />
+                  취소
+                </Button>
+                <Button onClick={handleEditSave}>
+                  <Save className="h-4 w-4 mr-2" />
+                  저장
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEditStart}>
+                <Edit2 className="h-4 w-4 mr-2" />
+                부서 수정
+              </Button>
+            )}
+          </div>
 
           {/* 하위 부서 정보 */}
           <Card>
@@ -445,14 +606,14 @@ export default function DepartmentsPage() {
             </CardContent>
           </Card>
         </div>
-      ) : (
+      ) : !showListView ? (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           <div className="text-center">
             <div className="text-lg font-medium mb-2">부서를 선택하세요</div>
             <div className="text-sm">왼쪽 목록에서 부서를 선택하면 상세 정보를 확인할 수 있습니다.</div>
           </div>
         </div>
-      )}
+      ) : null}
     </BaseInfoLayout>
   )
 }

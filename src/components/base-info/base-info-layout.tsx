@@ -1,16 +1,10 @@
 "use client"
 
 import { useState, ReactNode } from "react"
-import { Search, Plus, Edit2, Trash2, MoreVertical, ChevronRight, ChevronDown } from "lucide-react"
+import { Search, ChevronRight, ChevronDown, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
 interface TreeItem {
@@ -27,12 +21,12 @@ interface BaseInfoLayoutProps {
   treeData: TreeItem[]
   selectedItem?: TreeItem | null
   onItemSelect: (item: TreeItem) => void
-  onAdd: () => void
-  onEdit: (item: TreeItem) => void
-  onDelete: (item: TreeItem) => void
+  onShowList?: () => void // 목록보기 버튼 클릭 핸들러
   children: ReactNode
   searchPlaceholder?: string
   customTreeRenderer?: (props: { searchTerm: string }) => ReactNode
+  showListView?: boolean // 목록뷰 표시 여부
+  listViewComponent?: ReactNode // 목록뷰에서 보여줄 컴포넌트
 }
 
 interface TreeNodeProps {
@@ -40,11 +34,9 @@ interface TreeNodeProps {
   level: number
   selectedId?: string
   onSelect: (item: TreeItem) => void
-  onEdit: (item: TreeItem) => void
-  onDelete: (item: TreeItem) => void
 }
 
-function TreeNode({ item, level, selectedId, onSelect, onEdit, onDelete }: TreeNodeProps) {
+function TreeNode({ item, level, selectedId, onSelect }: TreeNodeProps) {
   const [isExpanded, setIsExpanded] = useState(level < 2) // Auto-expand first 2 levels
   const hasChildren = item.children && item.children.length > 0
   const isSelected = selectedId === item.id
@@ -77,34 +69,8 @@ function TreeNode({ item, level, selectedId, onSelect, onEdit, onDelete }: TreeN
           </Button>
         )}
         
-        <div className="flex-1 flex items-center justify-between">
+        <div className="flex-1">
           <span className="text-sm font-medium truncate">{item.name}</span>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <MoreVertical className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(item)}>
-                <Edit2 className="h-3 w-3 mr-2" />
-                수정
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => onDelete(item)}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="h-3 w-3 mr-2" />
-                삭제
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
       
@@ -117,8 +83,6 @@ function TreeNode({ item, level, selectedId, onSelect, onEdit, onDelete }: TreeN
               level={level + 1}
               selectedId={selectedId}
               onSelect={onSelect}
-              onEdit={onEdit}
-              onDelete={onDelete}
             />
           ))}
         </div>
@@ -133,12 +97,12 @@ export function BaseInfoLayout({
   treeData,
   selectedItem,
   onItemSelect,
-  onAdd,
-  onEdit,
-  onDelete,
+  onShowList,
   children,
   searchPlaceholder = "검색...",
-  customTreeRenderer
+  customTreeRenderer,
+  showListView = false,
+  listViewComponent
 }: BaseInfoLayoutProps) {
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -161,14 +125,18 @@ export function BaseInfoLayout({
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">목록</CardTitle>
-              <Button 
-                onClick={onAdd}
-                size="sm" 
-                className="h-8 px-3"
-              >
-                <Plus className="h-3 w-3 mr-1" />
-                추가
-              </Button>
+              {onShowList && (
+                <Button 
+                  onClick={onShowList}
+                  size="sm" 
+                  variant="outline"
+                  className="h-8 px-3"
+                  title="전체 목록 보기"
+                >
+                  <List className="h-3 w-3 mr-1" />
+                  목록보기
+                </Button>
+              )}
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -192,8 +160,6 @@ export function BaseInfoLayout({
                     level={0}
                     selectedId={selectedItem?.id}
                     onSelect={onItemSelect}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
                   />
                 ))}
               </div>
@@ -208,39 +174,28 @@ export function BaseInfoLayout({
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg">
-                    {selectedItem ? `${selectedItem.name} 상세정보` : "항목을 선택하세요"}
+                    {showListView ? (
+                      `${title} 전체 목록`
+                    ) : selectedItem ? (
+                      `${selectedItem.name} 상세정보`
+                    ) : (
+                      "항목을 선택하세요"
+                    )}
                   </CardTitle>
-                  {selectedItem && (
+                  {showListView ? (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      등록된 모든 항목을 테이블 형태로 확인할 수 있습니다.
+                    </p>
+                  ) : selectedItem && (
                     <p className="text-sm text-muted-foreground mt-1">
                       선택된 항목의 정보를 확인하고 편집할 수 있습니다.
                     </p>
                   )}
                 </div>
-                {selectedItem && (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onEdit(selectedItem)}
-                    >
-                      <Edit2 className="h-3 w-3 mr-1" />
-                      수정
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onDelete(selectedItem)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-3 w-3 mr-1" />
-                      삭제
-                    </Button>
-                  </div>
-                )}
               </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-auto">
-              {children}
+              {showListView && listViewComponent ? listViewComponent : children}
             </CardContent>
           </Card>
         </div>

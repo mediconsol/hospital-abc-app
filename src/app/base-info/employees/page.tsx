@@ -3,12 +3,15 @@
 import { useState } from "react"
 import { BaseInfoLayout } from "@/components/base-info/base-info-layout"
 import { EmployeeTable } from "@/components/tables/employee-table"
+import { mockDepartments, mockEmployees as initialEmployees } from "@/lib/mock-data"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { User, Calendar, Hash, Mail, Phone, Building2, Briefcase } from "lucide-react"
+import { User, Calendar, Hash, Mail, Phone, Building2, Briefcase, Edit2, Save, X } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Employee {
   id: string
@@ -30,81 +33,27 @@ interface Employee {
   updated_at: string
 }
 
-// 목업 데이터
-const mockEmployees: Employee[] = [
-  {
-    id: '1',
-    hospital_id: '1',
-    period_id: '1',
-    employee_number: 'EMP001',
-    name: '김의사',
-    position: '과장',
-    department_id: '1',
-    department_name: '내과',
-    email: 'doctor.kim@hospital.com',
-    phone: '02-1234-5678',
-    hire_date: '2020-03-15',
-    employment_type: 'full_time',
-    salary: 80000000,
-    description: '내과 전문의',
-    is_active: true,
-    created_at: '2025-01-01T00:00:00Z',
-    updated_at: '2025-01-01T00:00:00Z'
-  },
-  {
-    id: '2',
-    hospital_id: '1',
-    period_id: '1',
-    employee_number: 'EMP002',
-    name: '박간호사',
-    position: '수간호사',
-    department_id: '1',
-    department_name: '내과',
-    email: 'nurse.park@hospital.com',
-    phone: '02-1234-5679',
-    hire_date: '2018-01-20',
-    employment_type: 'full_time',
-    salary: 45000000,
-    description: '내과병동 수간호사',
-    is_active: true,
-    created_at: '2025-01-01T00:00:00Z',
-    updated_at: '2025-01-01T00:00:00Z'
-  },
-  {
-    id: '3',
-    hospital_id: '1',
-    period_id: '1',
-    employee_number: 'EMP003',
-    name: '최기사',
-    position: '주임',
-    department_id: '2',
-    department_name: '방사선과',
-    email: 'tech.choi@hospital.com',
-    phone: '02-1234-5680',
-    hire_date: '2019-06-10',
-    employment_type: 'full_time',
-    salary: 38000000,
-    description: '방사선 촬영 기사',
-    is_active: true,
-    created_at: '2025-01-01T00:00:00Z',
-    updated_at: '2025-01-01T00:00:00Z'
-  }
-]
+// mock-data.ts에서 가져온 데이터 사용
 
 export default function EmployeesPage() {
-  const [employees, setEmployees] = useState<Employee[]>(mockEmployees)
+  const [employees, setEmployees] = useState<Employee[]>(initialEmployees)
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
   const [showTable, setShowTable] = useState(true)
+  const [showListView, setShowListView] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editFormData, setEditFormData] = useState<Employee | null>(null)
 
   const handleAdd = () => {
     console.log("직원 추가")
     setSelectedEmployee(null)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleEdit = (employee: Employee) => {
     setSelectedEmployee(employee)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleDelete = (employee: Employee) => {
@@ -120,17 +69,71 @@ export default function EmployeesPage() {
   const handleItemSelect = (item: any) => {
     setSelectedEmployee(item.data)
     setShowTable(false)
+    setShowListView(false)
+  }
+
+  const handleShowList = () => {
+    setShowListView(true)
+    setSelectedEmployee(null)
+    setShowTable(true)
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditStart = () => {
+    if (selectedEmployee) {
+      setEditFormData({...selectedEmployee})
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditSave = () => {
+    if (editFormData && selectedEmployee) {
+      setEmployees(employees.map(employee => 
+        employee.id === selectedEmployee.id ? editFormData : employee
+      ))
+      setSelectedEmployee(editFormData)
+      setIsEditing(false)
+      setEditFormData(null)
+    }
+  }
+
+  const handleFieldChange = (field: keyof Employee, value: any) => {
+    if (editFormData) {
+      setEditFormData({
+        ...editFormData,
+        [field]: value
+      })
+    }
+  }
+
+  // 부서 ID로 부서명 찾기
+  const getDepartmentName = (departmentId: string) => {
+    const department = mockDepartments.find(d => d.id === departmentId)
+    return department ? department.name : '알 수 없음'
+  }
+
+  // 부서명으로 부서 ID 찾기
+  const getDepartmentId = (departmentName: string) => {
+    const department = mockDepartments.find(d => d.name === departmentName)
+    return department ? department.id : ''
   }
 
   // 트리 데이터 생성 (부서별로 그룹화)
   const buildTreeData = () => {
-    const departments = [...new Set(employees.map(emp => emp.department_name || '미분류'))]
+    const departmentIds = [...new Set(employees.map(emp => emp.department_id))]
     
-    return departments.map(dept => {
-      const deptEmployees = employees.filter(emp => (emp.department_name || '미분류') === dept)
+    return departmentIds.map(deptId => {
+      const departmentName = getDepartmentName(deptId)
+      const deptEmployees = employees.filter(emp => emp.department_id === deptId)
       return {
-        id: dept,
-        name: `${dept} (${deptEmployees.length}명)`,
+        id: deptId,
+        name: `${departmentName} (${deptEmployees.length}명)`,
         type: 'department',
         children: deptEmployees.map(emp => ({
           id: emp.id,
@@ -173,14 +176,16 @@ export default function EmployeesPage() {
       treeData={treeData}
       selectedItem={selectedEmployee ? { id: selectedEmployee.id, name: selectedEmployee.name, data: selectedEmployee } : null}
       onItemSelect={handleItemSelect}
-      onAdd={handleAdd}
-      onEdit={(item) => handleEdit(item.data as Employee)}
-      onDelete={(item) => handleDelete(item.data as Employee)}
-      searchPlaceholder="직원 검색..."
-    >
-      {showTable ? (
+      onShowList={handleShowList}
+      showListView={showListView}
+      listViewComponent={
         <EmployeeTable
           employees={employees}
+          onRowClick={(employee) => {
+            setSelectedEmployee(employee)
+            setShowListView(false)
+            setShowTable(false)
+          }}
           onAdd={(data) => {
             const newEmployee: Employee = {
               id: `${employees.length + 1}`,
@@ -221,7 +226,10 @@ export default function EmployeesPage() {
             }
           }}
         />
-      ) : selectedEmployee ? (
+      }
+      searchPlaceholder="직원 검색..."
+    >
+      {selectedEmployee && !showListView ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>
@@ -229,12 +237,38 @@ export default function EmployeesPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">직원 정보</h3>
                 <div className="flex items-center gap-2">
-                  <Badge className={getEmploymentTypeBadgeColor(selectedEmployee.employment_type)}>
-                    {getEmploymentTypeLabel(selectedEmployee.employment_type)}
-                  </Badge>
-                  <Badge variant={(selectedEmployee.is_active ?? true) ? "default" : "secondary"}>
-                    {(selectedEmployee.is_active ?? true) ? '재직' : '퇴직'}
-                  </Badge>
+                  {isEditing ? (
+                    <>
+                      <Select value={editFormData?.employment_type} onValueChange={(value) => handleFieldChange('employment_type', value)}>
+                        <SelectTrigger className="w-24">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="full_time">정규직</SelectItem>
+                          <SelectItem value="part_time">파트타임</SelectItem>
+                          <SelectItem value="contract">계약직</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={editFormData?.is_active ? "true" : "false"} onValueChange={(value) => handleFieldChange('is_active', value === "true")}>
+                        <SelectTrigger className="w-20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">재직</SelectItem>
+                          <SelectItem value="false">퇴직</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  ) : (
+                    <>
+                      <Badge className={getEmploymentTypeBadgeColor(selectedEmployee.employment_type)}>
+                        {getEmploymentTypeLabel(selectedEmployee.employment_type)}
+                      </Badge>
+                      <Badge variant={(selectedEmployee.is_active ?? true) ? "default" : "secondary"}>
+                        {(selectedEmployee.is_active ?? true) ? '재직' : '퇴직'}
+                      </Badge>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -243,14 +277,24 @@ export default function EmployeesPage() {
                   <Label htmlFor="employee_number">사번</Label>
                   <div className="flex items-center gap-2">
                     <Hash className="h-4 w-4 text-muted-foreground" />
-                    <Input id="employee_number" value={selectedEmployee.employee_number} readOnly />
+                    <Input 
+                      id="employee_number" 
+                      value={isEditing ? (editFormData?.employee_number || '') : selectedEmployee.employee_number} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('employee_number', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">이름</Label>
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <Input id="name" value={selectedEmployee.name} readOnly />
+                    <Input 
+                      id="name" 
+                      value={isEditing ? (editFormData?.name || '') : selectedEmployee.name} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('name', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -260,14 +304,47 @@ export default function EmployeesPage() {
                   <Label htmlFor="position">직급</Label>
                   <div className="flex items-center gap-2">
                     <Briefcase className="h-4 w-4 text-muted-foreground" />
-                    <Input id="position" value={selectedEmployee.position} readOnly />
+                    <Input 
+                      id="position" 
+                      value={isEditing ? (editFormData?.position || '') : selectedEmployee.position} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('position', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="department">부서</Label>
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-muted-foreground" />
-                    <Input id="department" value={selectedEmployee.department_name || '미분류'} readOnly />
+                    {isEditing ? (
+                      <Select 
+                        value={editFormData?.department_id} 
+                        onValueChange={(value) => {
+                          const departmentName = getDepartmentName(value)
+                          handleFieldChange('department_id', value)
+                          handleFieldChange('department_name', departmentName)
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="부서 선택" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockDepartments
+                            .filter(dept => dept.is_active !== false)
+                            .map((dept) => (
+                              <SelectItem key={dept.id} value={dept.id}>
+                                {dept.name}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input 
+                        id="department" 
+                        value={getDepartmentName(selectedEmployee.department_id) || '미분류'} 
+                        readOnly
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -277,14 +354,24 @@ export default function EmployeesPage() {
                   <Label htmlFor="email">이메일</Label>
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-muted-foreground" />
-                    <Input id="email" value={selectedEmployee.email || '없음'} readOnly />
+                    <Input 
+                      id="email" 
+                      value={isEditing ? (editFormData?.email || '') : (selectedEmployee.email || '없음')} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('email', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">연락처</Label>
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-muted-foreground" />
-                    <Input id="phone" value={selectedEmployee.phone || '없음'} readOnly />
+                    <Input 
+                      id="phone" 
+                      value={isEditing ? (editFormData?.phone || '') : (selectedEmployee.phone || '없음')} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('phone', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -296,14 +383,25 @@ export default function EmployeesPage() {
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="hire_date" 
-                      value={selectedEmployee.hire_date ? new Date(selectedEmployee.hire_date).toLocaleDateString('ko-KR') : '미등록'} 
-                      readOnly 
+                      type={isEditing ? "date" : "text"}
+                      value={isEditing ? (editFormData?.hire_date || '') : (selectedEmployee.hire_date ? new Date(selectedEmployee.hire_date).toLocaleDateString('ko-KR') : '미등록')} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('hire_date', e.target.value)}
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="salary">급여</Label>
-                  <Input id="salary" value={formatSalary(selectedEmployee.salary)} readOnly />
+                  {isEditing ? (
+                    <Input 
+                      id="salary" 
+                      type="number"
+                      value={editFormData?.salary || 0} 
+                      onChange={(e) => handleFieldChange('salary', parseInt(e.target.value) || 0)}
+                    />
+                  ) : (
+                    <Input id="salary" value={formatSalary(selectedEmployee.salary)} readOnly />
+                  )}
                 </div>
               </div>
               
@@ -311,9 +409,10 @@ export default function EmployeesPage() {
                 <Label htmlFor="description">설명</Label>
                 <Textarea 
                   id="description" 
-                  value={selectedEmployee.description || '설명이 없습니다.'} 
-                  readOnly 
-                  rows={3} 
+                  value={isEditing ? (editFormData?.description || '') : (selectedEmployee.description || '설명이 없습니다.')} 
+                  readOnly={!isEditing}
+                  rows={3}
+                  onChange={(e) => isEditing && handleFieldChange('description', e.target.value)}
                 />
               </div>
               
@@ -343,15 +442,36 @@ export default function EmployeesPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* 수정 버튼 */}
+          <div className="flex justify-end gap-2">
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleEditCancel}>
+                  <X className="h-4 w-4 mr-2" />
+                  취소
+                </Button>
+                <Button onClick={handleEditSave}>
+                  <Save className="h-4 w-4 mr-2" />
+                  저장
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEditStart}>
+                <Edit2 className="h-4 w-4 mr-2" />
+                직원 수정
+              </Button>
+            )}
+          </div>
         </div>
-      ) : (
+      ) : !showListView ? (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           <div className="text-center">
             <div className="text-lg font-medium mb-2">직원을 선택하세요</div>
             <div className="text-sm">왼쪽 목록에서 직원을 선택하면 상세 정보를 확인할 수 있습니다.</div>
           </div>
         </div>
-      )}
+      ) : null}
     </BaseInfoLayout>
   )
 }

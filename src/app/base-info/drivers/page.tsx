@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Calculator, Target, TrendingUp, BarChart3, Clock, Plus, Edit2, Trash2, CheckCircle, AlertTriangle, Settings, Ruler, Hash, Users, Activity } from "lucide-react"
+import { Calculator, Target, TrendingUp, BarChart3, Clock, Plus, Edit2, Trash2, CheckCircle, AlertTriangle, Settings, Ruler, Hash, Users, Activity, Save, X } from "lucide-react"
 import {
   Driver as NewDriver,
   DriverValue,
@@ -371,7 +371,10 @@ export default function DriversPage() {
   const [drivers, setDrivers] = useState<Driver[]>(mockDrivers)
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null)
   const [showTable, setShowTable] = useState(true)
+  const [showListView, setShowListView] = useState(false)
   const [activeTab, setActiveTab] = useState("drivers")
+  const [isEditing, setIsEditing] = useState(false)
+  const [editFormData, setEditFormData] = useState<Driver | null>(null)
 
   // 새로운 배분기준 상세 설정 상태
   const [selectedNewDriver, setSelectedNewDriver] = useState<string>("driver_area_001")
@@ -386,11 +389,53 @@ export default function DriversPage() {
     console.log("드라이버 추가")
     setSelectedDriver(null)
     setShowTable(false)
+    setShowListView(false)
   }
 
   const handleEdit = (driver: Driver) => {
     setSelectedDriver(driver)
     setShowTable(false)
+    setShowListView(false)
+  }
+
+  const handleShowList = () => {
+    setShowListView(true)
+    setSelectedDriver(null)
+    setShowTable(true)
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditStart = () => {
+    if (selectedDriver) {
+      setEditFormData({...selectedDriver})
+      setIsEditing(true)
+    }
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setEditFormData(null)
+  }
+
+  const handleEditSave = () => {
+    if (editFormData && selectedDriver) {
+      setDrivers(drivers.map(driver => 
+        driver.id === selectedDriver.id ? editFormData : driver
+      ))
+      setSelectedDriver(editFormData)
+      setIsEditing(false)
+      setEditFormData(null)
+    }
+  }
+
+  const handleFieldChange = (field: keyof Driver, value: any) => {
+    if (editFormData) {
+      setEditFormData({
+        ...editFormData,
+        [field]: value
+      })
+    }
   }
 
   const handleDelete = (driver: Driver) => {
@@ -406,6 +451,7 @@ export default function DriversPage() {
   const handleItemSelect = (item: any) => {
     setSelectedDriver(item.data)
     setShowTable(false)
+    setShowListView(false)
   }
 
   // Group by type for tree structure (more meaningful grouping)
@@ -597,67 +643,56 @@ export default function DriversPage() {
             treeData={treeData}
             selectedItem={selectedDriver ? { id: selectedDriver.id, name: selectedDriver.name, data: selectedDriver } : null}
             onItemSelect={handleItemSelect}
-            onAdd={handleAdd}
-            onEdit={(item) => handleEdit(item.data as Driver)}
-            onDelete={(item) => handleDelete(item.data as Driver)}
-            searchPlaceholder="드라이버 검색..."
-          >
-            {showTable ? (
-        <DriverTable
-          drivers={drivers}
-          onAdd={(data) => {
-            const newDriver: Driver = {
-              id: `${drivers.length + 1}`,
-              name: data.name,
-              code: data.code,
-              description: data.description,
-              type: data.type,
-              unit: data.unit,
-              measurementMethod: data.measurementMethod,
-              frequency: data.frequency,
-              status: data.status || 'testing',
-              departments: typeof data.departments === 'string' ? data.departments.split(',').map(d => d.trim()).filter(d => d.length > 0) : [],
-              activities: typeof data.activities === 'string' ? data.activities.split(',').map(a => a.trim()).filter(a => a.length > 0) : [],
-              costAllocation: { method: data.costAllocationMethod },
-              currentValue: data.currentValue,
-              targetValue: data.targetValue,
-              variance: data.targetValue > 0 ? data.currentValue - data.targetValue : undefined,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            }
-            setDrivers([...drivers, newDriver])
-          }}
-          onEdit={(id, data) => {
-            setDrivers(drivers.map(driver => 
-              driver.id === id 
-                ? { 
-                    ...driver, 
+            onShowList={handleShowList}
+            showListView={showListView}
+            listViewComponent={
+              <DriverTable
+                drivers={drivers}
+                onRowClick={(driver) => {
+                  setSelectedDriver(driver)
+                  setShowListView(false)
+                  setShowTable(false)
+                }}
+                onAdd={(data) => {
+                  const newDriver: Driver = {
+                    id: `${drivers.length + 1}`,
                     name: data.name,
                     code: data.code,
                     description: data.description,
                     type: data.type,
                     unit: data.unit,
-                    measurementMethod: data.measurementMethod,
-                    frequency: data.frequency,
-                    status: data.status,
-                    departments: typeof data.departments === 'string' ? data.departments.split(',').map(d => d.trim()).filter(d => d.length > 0) : [],
-                    activities: typeof data.activities === 'string' ? data.activities.split(',').map(a => a.trim()).filter(a => a.length > 0) : [],
-                    costAllocation: { method: data.costAllocationMethod },
-                    currentValue: data.currentValue,
-                    targetValue: data.targetValue,
-                    variance: data.targetValue > 0 ? data.currentValue - data.targetValue : undefined,
-                    updatedAt: new Date().toISOString()
+                    measurementMethod: data.measurementMethod || '',
+                    frequency: data.frequency || 'monthly',
+                    status: 'active',
+                    departments: data.departments || [],
+                    activities: data.activities || [],
+                    costAllocation: {
+                      method: 'equal'
+                    }
                   }
-                : driver
-            ))
-          }}
-          onDelete={(id) => {
-            if (confirm('정말로 이 드라이버를 삭제하시겠습니까?')) {
-              setDrivers(drivers.filter(driver => driver.id !== id))
+                  setDrivers([...drivers, newDriver])
+                }}
+                onEdit={(id, data) => {
+                  setDrivers(drivers.map(driver => 
+                    driver.id === id 
+                      ? { 
+                          ...driver, 
+                          ...data
+                        }
+                      : driver
+                  ))
+                }}
+                onDelete={(id) => {
+                  const driver = drivers.find(d => d.id === id)
+                  if (driver) {
+                    handleDelete(driver)
+                  }
+                }}
+              />
             }
-          }}
-        />
-      ) : selectedDriver ? (
+            searchPlaceholder="드라이버 검색..."
+          >
+            {selectedDriver && !showListView ? (
         <div className="space-y-6">
           {/* 기본 정보 */}
           <Card>
@@ -665,12 +700,40 @@ export default function DriversPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">드라이버 정보</h3>
                 <div className="flex items-center gap-2">
-                  <Badge className={getStatusColor(selectedDriver.status)}>
-                    {getStatusText(selectedDriver.status)}
-                  </Badge>
-                  <Badge variant="outline">
-                    {getTypeText(selectedDriver.type)}
-                  </Badge>
+                  {isEditing ? (
+                    <>
+                      <Select value={editFormData?.status} onValueChange={(value) => handleFieldChange('status', value)}>
+                        <SelectTrigger className="w-20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="active">활성</SelectItem>
+                          <SelectItem value="inactive">비활성</SelectItem>
+                          <SelectItem value="testing">테스트</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={editFormData?.type} onValueChange={(value) => handleFieldChange('type', value)}>
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="quantitative">정량적</SelectItem>
+                          <SelectItem value="qualitative">정성적</SelectItem>
+                          <SelectItem value="time-based">시간기준</SelectItem>
+                          <SelectItem value="resource-based">자원기준</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  ) : (
+                    <>
+                      <Badge className={getStatusColor(selectedDriver.status)}>
+                        {getStatusText(selectedDriver.status)}
+                      </Badge>
+                      <Badge variant="outline">
+                        {getTypeText(selectedDriver.type)}
+                      </Badge>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -679,35 +742,75 @@ export default function DriversPage() {
                   <Label htmlFor="code">드라이버 코드</Label>
                   <div className="flex items-center gap-2">
                     <Calculator className="h-4 w-4 text-muted-foreground" />
-                    <Input id="code" value={selectedDriver.code} readOnly />
+                    <Input 
+                      id="code" 
+                      value={isEditing ? (editFormData?.code || '') : selectedDriver.code} 
+                      readOnly={!isEditing}
+                      onChange={(e) => isEditing && handleFieldChange('code', e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="name">드라이버명</Label>
-                  <Input id="name" value={selectedDriver.name} readOnly />
+                  <Input 
+                    id="name" 
+                    value={isEditing ? (editFormData?.name || '') : selectedDriver.name} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('name', e.target.value)}
+                  />
                 </div>
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="description">설명</Label>
-                <Textarea id="description" value={selectedDriver.description} readOnly rows={2} />
+                <Textarea 
+                  id="description" 
+                  value={isEditing ? (editFormData?.description || '') : selectedDriver.description} 
+                  readOnly={!isEditing}
+                  rows={2}
+                  onChange={(e) => isEditing && handleFieldChange('description', e.target.value)}
+                />
               </div>
               
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="unit">측정 단위</Label>
-                  <Input id="unit" value={selectedDriver.unit} readOnly />
+                  <Input 
+                    id="unit" 
+                    value={isEditing ? (editFormData?.unit || '') : selectedDriver.unit} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('unit', e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="frequency">측정 주기</Label>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Input id="frequency" value={getFrequencyText(selectedDriver.frequency)} readOnly />
+                    {isEditing ? (
+                      <Select value={editFormData?.frequency} onValueChange={(value) => handleFieldChange('frequency', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="real-time">실시간</SelectItem>
+                          <SelectItem value="daily">일별</SelectItem>
+                          <SelectItem value="weekly">주별</SelectItem>
+                          <SelectItem value="monthly">월별</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input id="frequency" value={getFrequencyText(selectedDriver.frequency)} readOnly />
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="method">측정 방법</Label>
-                  <Input id="method" value={selectedDriver.measurementMethod} readOnly />
+                  <Input 
+                    id="method" 
+                    value={isEditing ? (editFormData?.measurementMethod || '') : selectedDriver.measurementMethod} 
+                    readOnly={!isEditing}
+                    onChange={(e) => isEditing && handleFieldChange('measurementMethod', e.target.value)}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -834,19 +937,33 @@ export default function DriversPage() {
             <Button variant="outline">
               측정 이력
             </Button>
-            <Button>
-              드라이버 수정
-            </Button>
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleEditCancel}>
+                  <X className="h-4 w-4 mr-2" />
+                  취소
+                </Button>
+                <Button onClick={handleEditSave}>
+                  <Save className="h-4 w-4 mr-2" />
+                  저장
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEditStart}>
+                <Edit2 className="h-4 w-4 mr-2" />
+                드라이버 수정
+              </Button>
+            )}
           </div>
         </div>
-      ) : (
+      ) : !showListView ? (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           <div className="text-center">
             <div className="text-lg font-medium mb-2">드라이버를 선택하세요</div>
             <div className="text-sm">왼쪽 목록에서 드라이버를 선택하면 상세 정보를 확인할 수 있습니다.</div>
           </div>
         </div>
-      )}
+      ) : null}
           </BaseInfoLayout>
         </TabsContent>
 

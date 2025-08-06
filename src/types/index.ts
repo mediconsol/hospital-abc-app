@@ -39,6 +39,7 @@ export interface Department extends BaseEntity {
   parent_id?: string; // 상위 부서
   manager?: string;
   description?: string;
+  is_active?: boolean; // 활성화 여부 (기본값: true)
 }
 
 export interface Account extends BaseEntity {
@@ -48,7 +49,11 @@ export interface Account extends BaseEntity {
   name: string; // '급여'
   category: 'salary' | 'material' | 'expense' | 'equipment';
   is_direct: boolean; // 직접비 여부
+  is_active?: boolean; // 활성/비활성 상태
   description?: string;
+  // 추가 분류 필드
+  major_category?: string; // 대분류명 (예: 비용, 자산)
+  minor_category?: string; // 중분류명 (예: 인건비, 재료비)
 }
 
 export interface Activity extends BaseEntity {
@@ -58,6 +63,7 @@ export interface Activity extends BaseEntity {
   name: string; // '진료활동'
   category: string; // '의료', '관리', '지원'
   department_id?: string;
+  is_active?: boolean; // 활성/비활성 상태
   description?: string;
 }
 
@@ -67,6 +73,7 @@ export interface Process extends BaseEntity {
   code: string; // 'PROC001'
   name: string; // '외래진료'
   activity_id: string;
+  is_active?: boolean; // 활성/비활성 상태
   description?: string;
 }
 
@@ -77,6 +84,7 @@ export interface RevenueCode extends BaseEntity {
   name: string; // '초진료' 
   category: string; // '진료비', '검사비', '처치비'
   unit_price: number;
+  is_active?: boolean; // 활성/비활성 상태
   description?: string;
 }
 
@@ -87,6 +95,7 @@ export interface Driver extends BaseEntity {
   name: string; // '면적'
   type: 'area' | 'time' | 'count' | 'weight' | 'volume';
   unit: string; // 'm²', 'hour', 'ea', 'kg', 'L'
+  is_active?: boolean; // 활성/비활성 상태
   description?: string;
 }
 
@@ -255,6 +264,7 @@ export interface CreateDepartmentForm {
   parent_id?: string;
   manager?: string;
   description?: string;
+  is_active?: boolean;
 }
 
 export interface CreateAccountForm {
