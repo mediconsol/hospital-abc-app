@@ -94,13 +94,18 @@ export interface Driver extends BaseEntity {
 export interface Employee extends BaseEntity {
   hospital_id: string;
   period_id: string;
-  emp_no: string; // 직원번호
+  employee_number: string; // 직원번호 (emp_no -> employee_number로 변경)
   name: string;
+  position: string; // 직책/직급
   department_id: string;
-  position: string; // 직책
-  salary: number; // 월급여
-  work_hours: number; // 월 근무시간
+  department_name: string; // 부서명 추가
+  email?: string; // 이메일 추가
+  phone?: string; // 연락처 추가
+  hire_date: string; // 입사일 추가
   employment_type: 'full_time' | 'part_time' | 'contract';
+  salary: number; // 연봉
+  description?: string; // 설명 추가
+  is_active: boolean; // 재직 여부 추가
 }
 
 export interface WorkRatio extends BaseEntity {
@@ -265,6 +270,20 @@ export interface CreateActivityForm {
   name: string;
   category: string;
   department_id?: string;
+  description?: string;
+}
+
+export interface CreateEmployeeForm {
+  employee_number: string;
+  name: string;
+  position: string;
+  department_id: string;
+  department_name: string;
+  email?: string;
+  phone?: string;
+  hire_date: string;
+  employment_type: 'full_time' | 'part_time' | 'contract';
+  salary: number;
   description?: string;
 }
 

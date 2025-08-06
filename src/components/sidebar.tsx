@@ -17,7 +17,8 @@ import {
   GitBranch,
   Link as LinkIcon,
   Workflow,
-  Monitor
+  Monitor,
+  Users
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -49,6 +50,7 @@ const navigation: NavItem[] = [
     icon: Database,
     children: [
       { title: "부서 관리", href: "/base-info/departments", icon: Database },
+      { title: "직원 관리", href: "/base-info/employees", icon: Users },
       { title: "활동 관리", href: "/base-info/activities", icon: Database },
       { title: "계정 관리", href: "/base-info/accounts", icon: Database },
       { title: "프로세스 관리", href: "/base-info/processes", icon: Database },
