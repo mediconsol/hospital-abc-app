@@ -101,3 +101,125 @@
  GET /hospital/select 200 in 271ms
  ✓ Compiled in 893ms (1044 modules)
  GET /hospital/select 200 in 216ms
+ GET /hospital/select 200 in 28ms
+ ○ Compiling /hospital/period ...
+ ✓ Compiled /hospital/period in 1139ms (1044 modules)
+ GET /hospital/period 200 in 1538ms
+ ✓ Compiled in 745ms (1047 modules)
+ GET /hospital/period 200 in 153ms
+ ✓ Compiled in 434ms (474 modules)
+ GET /hospital/period 200 in 423ms
+ ✓ Compiled in 512ms (474 modules)
+ GET /hospital/period 200 in 39ms
+ ✓ Compiled in 257ms (474 modules)
+ GET /hospital/period 200 in 247ms
+ ✓ Compiled in 362ms (474 modules)
+ GET /hospital/period 200 in 37ms
+ ✓ Compiled in 381ms (474 modules)
+ GET /hospital/period 200 in 302ms
+ ✓ Compiled in 371ms (474 modules)
+ GET /hospital/period 200 in 39ms
+ ✓ Compiled in 313ms (474 modules)
+ GET /hospital/period 200 in 248ms
+ ✓ Compiled in 313ms (474 modules)
+ GET /hospital/period 200 in 39ms
+ ○ Compiling /base-info/departments ...
+ ✓ Compiled /base-info/departments in 536ms (587 modules)
+ GET /base-info/departments 200 in 823ms
+ ✓ Compiled in 954ms (1061 modules)
+ GET /base-info/departments 200 in 313ms
+ ✓ Compiled in 751ms (1050 modules)
+ GET /base-info/departments 200 in 347ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ TypeError: Cannot read properties of undefined (reading 'sort')
+    at DepartmentForm (src\components\forms\department-form.tsx:178:19)
+  176 |                 <SelectItem value="none">상위부서 없음 (최상위 부서)</SelectItem>
+  177 |                 {getValidParentDepartments()
+> 178 |                   .sort((a, b) => {
+      |                   ^
+  179 |                     // 계층 구조에 따라 정렬
+  180 |                     const aHierarchy = getDepartmentHierarchy(a, departments)
+  181 |                     const bHierarchy = getDepartmentHierarchy(b, departments) {
+  digest: '103228932'
+}
+ GET /base-info/departments 500 in 529ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 506ms (593 modules)
+ GET /favicon.ico 200 in 1804ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1368ms (1067 modules)
+ GET /base-info/departments 200 in 825ms
+ GET /base-info/departments 200 in 1092ms
+ GET /favicon.ico 200 in 25ms
+ GET /favicon.ico 200 in 12ms
+ GET /favicon.ico 200 in 12ms
+ ✓ Compiled /base-info/cost-objects in 448ms (604 modules)
+ GET /base-info/cost-objects 200 in 729ms
+ ○ Compiling /base-info/accounts ...
+ ✓ Compiled /base-info/accounts in 674ms (1077 modules)
+ GET /base-info/accounts 200 in 908ms
+ ○ Compiling /base-info/activities ...
+ ✓ Compiled /base-info/activities in 580ms (1091 modules)
+ GET /base-info/activities 200 in 670ms
+ GET /base-info/cost-objects 200 in 26ms
+ ✓ Compiled in 918ms (1080 modules)
+ GET /base-info/cost-objects 200 in 144ms
+ ✓ Compiled in 1017ms (1080 modules)
+ GET /base-info/cost-objects 200 in 89ms
+ ⨯ ./src/components/tables/department-table.tsx
+Error:   [31mx[0m Expected '</', got ')'
+     ,-[[36;1;4mD:\mediconsol_csr\abc-rails\hospital-abc-app\src\components\tables\department-table.tsx[0m:181:1]
+ [2m178[0m |                       </div>
+ [2m179[0m |                     </TableCell>
+ [2m180[0m |                   </TableRow>
+ [2m181[0m |                 ))
+     : [35;1m                 ^[0m
+ [2m182[0m |               )}
+ [2m183[0m |             </TableBody>
+ [2m184[0m |           </Table>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/tables/department-table.tsx
+./src/app/base-info/departments/page.tsx
+ ○ Compiling /_error ...
+ ⨯ ./src/components/tables/department-table.tsx
+Error:   [31mx[0m Expected '</', got ')'
+     ,-[[36;1;4mD:\mediconsol_csr\abc-rails\hospital-abc-app\src\components\tables\department-table.tsx[0m:181:1]
+ [2m178[0m |                       </div>
+ [2m179[0m |                     </TableCell>
+ [2m180[0m |                   </TableRow>
+ [2m181[0m |                 ))
+     : [35;1m                 ^[0m
+ [2m182[0m |               )}
+ [2m183[0m |             </TableBody>
+ [2m184[0m |           </Table>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/tables/department-table.tsx
+./src/app/base-info/departments/page.tsx
+ GET /base-info/cost-objects 500 in 3884ms
+ GET /base-info/cost-objects 500 in 156ms
+ GET /base-info/cost-objects 500 in 56ms
+ GET /base-info/cost-objects 500 in 34ms
+ ✓ Compiled /_error in 1393ms (1304 modules)
+buildCostObjectTree - Input objects: 10
+buildCostObjectTree - Root objects: 1
+buildCostObjectTree - Root items: [ { id: 'pc1', name: '진료부', children: 2 } ]
+Selected Type: patient_care
+Cost Objects: 10
+Tree Data: 1
+ ○ Compiling /_not-found ...
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /base-info/cost-objects 200 in 2216ms
+ ✓ Compiled /_not-found in 2.7s (1295 modules)
+ ✓ Compiled /favicon.ico in 491ms (691 modules)
+ GET /favicon.ico 200 in 1944ms

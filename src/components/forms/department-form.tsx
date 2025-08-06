@@ -13,6 +13,13 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog"
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select"
 import { CreateDepartmentForm, Department } from "@/types"
 
 interface DepartmentFormProps {
@@ -21,6 +28,7 @@ interface DepartmentFormProps {
   onSubmit: (data: CreateDepartmentForm) => void
   department?: Department | null
   mode: 'create' | 'edit'
+  departments: Department[] // 상위부서 선택을 위한 부서 목록
 }
 
 export function DepartmentForm({ 
@@ -28,17 +36,46 @@ export function DepartmentForm({
   onClose, 
   onSubmit, 
   department, 
-  mode 
+  mode,
+  departments 
 }: DepartmentFormProps) {
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CreateDepartmentForm>({
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<CreateDepartmentForm>({
     defaultValues: {
       code: '',
       name: '',
       type: 'direct',
+      parent_id: '',
       manager: '',
       description: '',
     }
   })
+
+  const watchedParentId = watch('parent_id')
+
+  // 계층형 부서 표시를 위한 헬퍼 함수
+  const getDepartmentHierarchy = (dept: Department, allDepts: Department[]): string => {
+    if (!dept.parent_id) return dept.name
+    const parent = allDepts.find(d => d.id === dept.parent_id)
+    if (!parent) return dept.name
+    return `${getDepartmentHierarchy(parent, allDepts)} > ${dept.name}`
+  }
+
+  // 자기 자신과 하위 부서들은 상위부서로 선택할 수 없도록 필터링
+  const getValidParentDepartments = () => {
+    if (mode === 'create') return departments
+
+    const getChildDepartmentIds = (deptId: string): string[] => {
+      const children = departments.filter(d => d.parent_id === deptId)
+      const childIds = children.map(c => c.id)
+      const grandChildIds = children.flatMap(c => getChildDepartmentIds(c.id))
+      return [...childIds, ...grandChildIds]
+    }
+
+    if (!department) return departments
+    
+    const excludeIds = [department.id, ...getChildDepartmentIds(department.id)]
+    return departments.filter(d => !excludeIds.includes(d.id))
+  }
 
   // 부서 데이터가 변경되면 폼 필드를 업데이트
   useEffect(() => {
@@ -46,6 +83,7 @@ export function DepartmentForm({
       setValue('code', department.code)
       setValue('name', department.name)
       setValue('type', department.type)
+      setValue('parent_id', department.parent_id || '')
       setValue('manager', department.manager || '')
       setValue('description', department.description || '')
     } else if (mode === 'create') {
@@ -53,6 +91,7 @@ export function DepartmentForm({
         code: '',
         name: '',
         type: 'direct',
+        parent_id: '',
         manager: '',
         description: '',
       })
@@ -122,6 +161,45 @@ export function DepartmentForm({
             {errors.type && (
               <p className="text-sm text-red-500">{errors.type.message}</p>
             )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="parent_id">상위부서</Label>
+            <Select 
+              value={watchedParentId || ""} 
+              onValueChange={(value) => setValue('parent_id', value === "none" ? "" : value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="상위부서를 선택하세요 (선택사항)" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                <SelectItem value="none">상위부서 없음 (최상위 부서)</SelectItem>
+                {getValidParentDepartments()
+                  .sort((a, b) => {
+                    // 계층 구조에 따라 정렬
+                    const aHierarchy = getDepartmentHierarchy(a, departments)
+                    const bHierarchy = getDepartmentHierarchy(b, departments)
+                    return aHierarchy.localeCompare(bHierarchy)
+                  })
+                  .map((dept) => (
+                    <SelectItem key={dept.id} value={dept.id}>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">
+                          {dept.parent_id ? '└' : '■'}
+                        </span>
+                        <span>{getDepartmentHierarchy(dept, departments)}</span>
+                        <span className="text-xs text-muted-foreground">
+                          ({dept.type === 'direct' ? '직접' : '간접'})
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))
+                }
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {mode === 'edit' ? '수정 시 자기 자신과 하위 부서는 선택할 수 없습니다.' : '최상위 부서로 만들려면 "상위부서 없음"을 선택하세요.'}
+            </p>
           </div>
           
           <div className="space-y-2">

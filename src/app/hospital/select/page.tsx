@@ -38,8 +38,8 @@ const mockHospitals: Hospital[] = [
   {
     id: "1",
     name: "가족사랑요양병원",
-    address: "서울특별시 강남구 테헤란로 123",
-    phone: "02-1234-5678",
+    address: "전북특별자치도 김제시 하동1길 13",
+    phone: "063-540-1500",
     type: "요양병원",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z"
